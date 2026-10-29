@@ -1,0 +1,122 @@
+[
+  {
+    "id": "b5aecf37-4405-4041-9fa1-78c9d22d40ea",
+    "title": "Beca completa para un bootcamp de desarrollo web Full Stack",
+    "category": "scholarship",
+    "province": "caba",
+    "url": "https://example.com/news/1",
+    "clicks": 128,
+    "publishedAt": "2026-10-27T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "c1a7bbdc-00c2-4a40-915e-cda7a95e4ffa",
+    "title": "Curso gratuito de Python para análisis de datos",
+    "category": "course",
+    "province": "cordoba",
+    "url": "https://example.com/news/2",
+    "clicks": 94,
+    "publishedAt": "2026-10-26T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "bba91352-b094-4845-a90b-9915d7fe2b57",
+    "title": "Meetup de React y Next.js en Rosario",
+    "category": "event",
+    "province": "santa_fe",
+    "url": "https://example.com/news/3",
+    "clicks": 71,
+    "publishedAt": "2026-10-24T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "8d209512-27ca-4384-ad86-f4e1e76d0193",
+    "title": "30% de descuento en certificaciones de AWS para la comunidad",
+    "category": "discount",
+    "province": "caba",
+    "url": "https://example.com/news/4",
+    "clicks": 215,
+    "publishedAt": "2026-10-22T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "e2b2cc4f-64e6-4c2a-9f41-c3f2b59ce224",
+    "title": "Nueva cohorte del grupo de estudio de algoritmos",
+    "category": "community",
+    "province": "buenos_aires",
+    "url": "https://example.com/news/5",
+    "clicks": 56,
+    "publishedAt": "2026-10-20T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "c2869fcf-abe9-44cf-a790-6f462ed3f4bf",
+    "title": "Hackathon provincial de soluciones para el agro",
+    "category": "event",
+    "province": "mendoza",
+    "url": "https://example.com/news/6",
+    "clicks": 83,
+    "publishedAt": "2026-10-17T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "b3122a60-9e63-44bc-a8a5-03a5a078d910",
+    "title": "Becas para cursos de ciberseguridad en universidades públicas",
+    "category": "scholarship",
+    "province": "tucuman",
+    "url": "https://example.com/news/7",
+    "clicks": 142,
+    "publishedAt": "2026-10-15T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "84cea862-d6ce-42d8-adb4-2ed9b31a3a93",
+    "title": "Taller de introducción a Docker y contenedores",
+    "category": "course",
+    "province": "neuquen",
+    "url": "https://example.com/news/8",
+    "clicks": 64,
+    "publishedAt": "2026-10-12T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "def10d02-44b0-4654-acba-a52be120f90d",
+    "title": "Descuento en herramientas de diseño para estudiantes",
+    "category": "discount",
+    "province": "salta",
+    "url": "https://example.com/news/9",
+    "clicks": 99,
+    "publishedAt": "2026-10-09T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "c093f087-a441-472e-8b02-6bd3c3156829",
+    "title": "Charla abierta: cómo prepararte para tu primera entrevista técnica",
+    "category": "event",
+    "province": "entre_rios",
+    "url": "https://example.com/news/10",
+    "clicks": 77,
+    "publishedAt": "2026-10-06T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "8d94989f-d0ab-48e5-84f4-c7d532f7a1ad",
+    "title": "Mentorías gratuitas para quienes buscan su primer trabajo IT",
+    "category": "community",
+    "province": "chubut",
+    "url": "https://example.com/news/11",
+    "clicks": 188,
+    "publishedAt": "2026-10-02T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  },
+  {
+    "id": "d697ff13-2e38-40c6-ac12-7d42f8a221bf",
+    "title": "Curso de testing automatizado con Cypress",
+    "category": "course",
+    "province": "misiones",
+    "url": "https://example.com/news/12",
+    "clicks": 49,
+    "publishedAt": "2026-09-28T15:00:00.000Z",
+    "authorId": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357"
+  }
+]

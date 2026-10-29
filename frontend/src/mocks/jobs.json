@@ -1,0 +1,284 @@
+[
+  {
+    "id": "07dc97f9-819d-4933-b0cf-3875b4df16da",
+    "title": "Frontend Developer React",
+    "company": "Pampa Soft",
+    "description": "Sumate al equipo que construye la plataforma web de la empresa con React y TypeScript.",
+    "area": "frontend",
+    "seniority": "mid",
+    "modality": "remote",
+    "province": "caba",
+    "skills": [
+      "react",
+      "typescript",
+      "next_js",
+      "tailwind_css"
+    ],
+    "applyUrl": "https://example.com/careers/1",
+    "status": "approved",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-27T15:00:00.000Z"
+  },
+  {
+    "id": "a8d81b96-0ad5-4000-907a-4a89bd33f9f4",
+    "title": "Backend Developer NestJS",
+    "company": "Andes Labs",
+    "description": "Diseñá y mantené APIs REST con NestJS y PostgreSQL en un equipo ágil.",
+    "area": "backend",
+    "seniority": "senior",
+    "modality": "hybrid",
+    "province": "cordoba",
+    "skills": [
+      "nest_js",
+      "typescript",
+      "postgresql",
+      "docker"
+    ],
+    "applyUrl": "https://example.com/careers/2",
+    "status": "approved",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-26T15:00:00.000Z"
+  },
+  {
+    "id": "1cf2e0e2-d87f-4340-8b99-61f18be69edc",
+    "title": "Fullstack Developer Trainee",
+    "company": "Río Digital",
+    "description": "Primera experiencia laboral: te acompañamos con mentoría en proyectos reales de JavaScript.",
+    "area": "fullstack",
+    "seniority": "trainee",
+    "modality": "onsite",
+    "province": "santa_fe",
+    "skills": [
+      "javascript",
+      "react",
+      "node_js",
+      "git"
+    ],
+    "applyUrl": "https://example.com/careers/3",
+    "status": "approved",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-24T15:00:00.000Z"
+  },
+  {
+    "id": "5ad85288-2e57-4820-bff1-e4b28e37378a",
+    "title": "QA Automation Engineer",
+    "company": "Cuyo Tech",
+    "description": "Automatizá pruebas end to end y ayudá a definir la estrategia de calidad del producto.",
+    "area": "qa",
+    "seniority": "mid",
+    "modality": "remote",
+    "province": "mendoza",
+    "skills": [
+      "cypress",
+      "javascript",
+      "jest",
+      "git"
+    ],
+    "applyUrl": "https://example.com/careers/4",
+    "status": "approved",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-21T15:00:00.000Z"
+  },
+  {
+    "id": "bfbd8bf6-0bd5-474c-bc7e-4c952c693890",
+    "title": "DevOps Engineer",
+    "company": "Patagonia Cloud",
+    "description": "Administrá la infraestructura en la nube y los pipelines de despliegue continuo.",
+    "area": "devops",
+    "seniority": "senior",
+    "modality": "remote",
+    "province": "neuquen",
+    "skills": [
+      "aws",
+      "docker",
+      "kubernetes",
+      "linux"
+    ],
+    "applyUrl": "https://example.com/careers/5",
+    "status": "approved",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-19T15:00:00.000Z"
+  },
+  {
+    "id": "61677330-15b7-4bb0-895c-3723d50edc2d",
+    "title": "Data Analyst",
+    "company": "Delta Data",
+    "description": "Armá tableros y consultas para que las áreas de negocio tomen decisiones con datos.",
+    "area": "data",
+    "seniority": "junior",
+    "modality": "hybrid",
+    "province": "caba",
+    "skills": [
+      "sql",
+      "python",
+      "power_bi"
+    ],
+    "applyUrl": "https://example.com/careers/6",
+    "status": "approved",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-10-16T15:00:00.000Z"
+  },
+  {
+    "id": "62124a90-d14e-4575-98f1-3432b3cceb2d",
+    "title": "Mobile Developer React Native",
+    "company": "Litoral Systems",
+    "description": "Desarrollá la app móvil de la empresa para iOS y Android con React Native.",
+    "area": "mobile",
+    "seniority": "mid",
+    "modality": "remote",
+    "province": "entre_rios",
+    "skills": [
+      "react_native",
+      "typescript",
+      "git"
+    ],
+    "applyUrl": "https://example.com/careers/7",
+    "status": "approved",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-10-10T15:00:00.000Z"
+  },
+  {
+    "id": "23fd14da-a57a-4b7f-8353-a7266a90d5a4",
+    "title": "UX/UI Designer",
+    "company": "Ñandú Studio",
+    "description": "Diseñá interfaces y prototipos en Figma junto al equipo de producto.",
+    "area": "design",
+    "seniority": "junior",
+    "modality": "remote",
+    "province": "buenos_aires",
+    "skills": [
+      "figma",
+      "html_css"
+    ],
+    "applyUrl": "https://example.com/careers/8",
+    "status": "approved",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-10-05T15:00:00.000Z"
+  },
+  {
+    "id": "7042c51f-cb34-4147-b325-2f59f0809497",
+    "title": "Java Backend Developer",
+    "company": "Aconcagua Software",
+    "description": "Sumate a un equipo que mantiene servicios bancarios con Java y Spring Boot.",
+    "area": "backend",
+    "seniority": "mid",
+    "modality": "onsite",
+    "province": "mendoza",
+    "skills": [
+      "java",
+      "spring_boot",
+      "mysql",
+      "docker"
+    ],
+    "applyUrl": "https://example.com/careers/9",
+    "status": "approved",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-09-22T15:00:00.000Z"
+  },
+  {
+    "id": "4314cf2e-6ef5-4b86-9623-7b0b89e42e16",
+    "title": "Product Manager",
+    "company": "Tango Digital",
+    "description": "Liderá la estrategia de un producto SaaS y coordiná al equipo de desarrollo y diseño.",
+    "area": "product",
+    "seniority": "senior",
+    "modality": "hybrid",
+    "province": "caba",
+    "skills": [],
+    "applyUrl": "https://example.com/careers/10",
+    "status": "approved",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-09-18T15:00:00.000Z"
+  },
+  {
+    "id": "5817f381-ca15-454f-9d49-953834582ffb",
+    "title": "Angular Developer",
+    "company": "Yerba Labs",
+    "description": "Construí módulos de un sistema de gestión con Angular y TypeScript.",
+    "area": "frontend",
+    "seniority": "junior",
+    "modality": "remote",
+    "province": "misiones",
+    "skills": [
+      "angular",
+      "typescript",
+      "html_css"
+    ],
+    "applyUrl": "https://example.com/careers/11",
+    "status": "pending",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-28T15:00:00.000Z"
+  },
+  {
+    "id": "70e4eaa7-4278-4e3e-bc2e-cbeb4552c567",
+    "title": "Python Developer",
+    "company": "Mate Analytics",
+    "description": "Desarrollá servicios con Django y PostgreSQL para una plataforma de analítica.",
+    "area": "backend",
+    "seniority": "mid",
+    "modality": "remote",
+    "province": "tucuman",
+    "skills": [
+      "python",
+      "django",
+      "postgresql"
+    ],
+    "applyUrl": "https://example.com/careers/12",
+    "status": "pending",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-27T15:00:00.000Z"
+  },
+  {
+    "id": "c6e0d4bc-a5b7-4f07-84f6-1f883d51df2f",
+    "title": "Security Analyst",
+    "company": "Quebracho Security",
+    "description": "Monitoreá incidentes y realizá revisiones de seguridad sobre aplicaciones web.",
+    "area": "security",
+    "seniority": "senior",
+    "modality": "onsite",
+    "province": "caba",
+    "skills": [
+      "linux",
+      "python"
+    ],
+    "applyUrl": "https://example.com/careers/13",
+    "status": "pending",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-10-25T15:00:00.000Z"
+  },
+  {
+    "id": "aaecc175-81c8-41ce-be73-d3d4d97868e2",
+    "title": "Soporte técnico IT",
+    "company": "Algarrobo Sistemas",
+    "description": "Atención de incidentes de usuarios y mantenimiento básico de equipos.",
+    "area": "support",
+    "seniority": "trainee",
+    "modality": "onsite",
+    "province": "san_luis",
+    "skills": [
+      "linux"
+    ],
+    "applyUrl": "https://example.com/careers/14",
+    "status": "rejected",
+    "authorId": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "createdAt": "2026-10-14T15:00:00.000Z"
+  },
+  {
+    "id": "e792123c-c2f4-44e6-8695-ee412ce217e5",
+    "title": "Flutter Developer",
+    "company": "Cardón Apps",
+    "description": "Desarrollá apps multiplataforma con Flutter para clientes del sector turismo.",
+    "area": "mobile",
+    "seniority": "junior",
+    "modality": "remote",
+    "province": "salta",
+    "skills": [
+      "flutter",
+      "git"
+    ],
+    "applyUrl": "https://example.com/careers/15",
+    "status": "rejected",
+    "authorId": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "createdAt": "2026-10-08T15:00:00.000Z"
+  }
+]
