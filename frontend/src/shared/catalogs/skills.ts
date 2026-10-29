@@ -1,0 +1,47 @@
+import type { Option } from "@/shared/types";
+
+// Skills are an open catalog (not an enum): entities store the slug as a plain string.
+export const SKILL_OPTIONS: readonly Option[] = [
+  { value: "javascript", label: "JavaScript" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "react", label: "React" },
+  { value: "next_js", label: "Next.js" },
+  { value: "angular", label: "Angular" },
+  { value: "vue_js", label: "Vue.js" },
+  { value: "html_css", label: "HTML / CSS" },
+  { value: "tailwind_css", label: "Tailwind CSS" },
+  { value: "node_js", label: "Node.js" },
+  { value: "nest_js", label: "NestJS" },
+  { value: "express", label: "Express" },
+  { value: "python", label: "Python" },
+  { value: "django", label: "Django" },
+  { value: "java", label: "Java" },
+  { value: "spring_boot", label: "Spring Boot" },
+  { value: "dot_net", label: ".NET" },
+  { value: "c_sharp", label: "C#" },
+  { value: "php", label: "PHP" },
+  { value: "laravel", label: "Laravel" },
+  { value: "go", label: "Go" },
+  { value: "kotlin", label: "Kotlin" },
+  { value: "swift", label: "Swift" },
+  { value: "react_native", label: "React Native" },
+  { value: "flutter", label: "Flutter" },
+  { value: "sql", label: "SQL" },
+  { value: "postgresql", label: "PostgreSQL" },
+  { value: "mysql", label: "MySQL" },
+  { value: "mongodb", label: "MongoDB" },
+  { value: "docker", label: "Docker" },
+  { value: "kubernetes", label: "Kubernetes" },
+  { value: "aws", label: "AWS" },
+  { value: "azure", label: "Azure" },
+  { value: "linux", label: "Linux" },
+  { value: "git", label: "Git" },
+  { value: "figma", label: "Figma" },
+  { value: "cypress", label: "Cypress" },
+  { value: "jest", label: "Jest" },
+  { value: "power_bi", label: "Power BI" },
+];
+
+export const SKILL_LABELS: Readonly<Record<string, string>> = Object.fromEntries(
+  SKILL_OPTIONS.map(({ value, label }) => [value, label]),
+);
