@@ -1,26 +1,43 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Brand: sky blue from the Argentine flag. 600+ keeps 4.5:1 contrast with white text. */
+  --color-brand-50: #eef7fd;
+  --color-brand-100: #d9edfa;
+  --color-brand-200: #b8dcf5;
+  --color-brand-300: #8cc4ee;
+  --color-brand-400: #74acdf;
+  --color-brand-500: #4d92cf;
+  --color-brand-600: #2f78b8;
+  --color-brand-700: #26629a;
+  --color-brand-800: #234f7c;
+  --color-brand-900: #1f4163;
+
+  /* Accent: the flag's sun, for small highlights only. */
+  --color-sun-400: #f9c74f;
+  --color-sun-500: #f6b40e;
+
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
 }
