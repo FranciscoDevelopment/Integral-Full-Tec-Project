@@ -1,0 +1,23 @@
+[
+  {
+    "id": "d4cffde0-dd41-4d9a-8e9e-f29e1f2ba357",
+    "name": "Admin Demo",
+    "email": "admin@demo.com",
+    "role": "admin",
+    "createdAt": "2026-09-01T12:00:00.000Z"
+  },
+  {
+    "id": "e6c90e5b-7567-4f5b-a1fe-1d868c91ed6c",
+    "name": "Usuario Demo",
+    "email": "user@demo.com",
+    "role": "user",
+    "createdAt": "2026-09-02T12:00:00.000Z"
+  },
+  {
+    "id": "acd9a072-5901-4e2f-b9bf-25b37d2d4d71",
+    "name": "Lucía Fernández",
+    "email": "user2@demo.com",
+    "role": "user",
+    "createdAt": "2026-09-10T12:00:00.000Z"
+  }
+]
