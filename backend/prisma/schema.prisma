@@ -1,0 +1,185 @@
+generator client {
+    provider = "prisma-client"
+    output = "../src/generated/prisma"
+    moduleFormat = "cjs"
+}
+
+datasource db {
+    provider = "postgresql"
+    url = env( "DATABASE_URL" )
+}
+
+
+// Enums
+// Lowercase on purpose: they are the values in the brief and travel as-is through the API.
+
+
+enum Role {
+    
+    user
+    
+    sponsor
+    
+    admin
+}
+
+enum UserStatus {
+
+    active
+
+    suspended
+
+}
+
+enum ProjectKind {
+
+    app
+
+    game
+
+    tool
+
+}
+
+
+enum ProjectStatus {
+
+    active
+
+    completed
+
+    hidden
+
+}
+
+enum CollaborationStatus {
+
+  pending
+  
+  accepted
+  
+  confirmed
+  
+  rejected
+
+}
+
+enum ContributionStatus {
+  simulated
+}
+
+
+// ── Entities ──
+
+// Evolved by: D2
+model User {
+    
+  id       String     @id @default(uuid()) @db.Uuid
+  name     String     @db.VarChar(60)
+  email    String     @unique @db.VarChar(254)
+  password String // bcrypt hash, back end only: never returned in a response
+  role     Role       @default(user)
+  status   UserStatus @default(active)
+
+  // sponsors only
+  companyName String? @db.VarChar(100)
+  logoUrl     String?
+  website     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects       Project[]
+  updates        Update[]
+  collaborations Collaboration[]
+  contributions  Contribution[]
+
+  @@map("users")
+}
+
+// Evolved by: D3
+model Project {
+
+  id          String        @id @default(uuid()) @db.Uuid
+  title       String        @db.VarChar(120)
+  description String
+  repoUrl     String
+  kind        ProjectKind
+  goalAmount  Decimal       @db.Decimal(12, 2)
+  status      ProjectStatus @default(active)
+  ownerId     String        @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner          User            @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  updates        Update[]
+  collaborations Collaboration[]
+  contributions  Contribution[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@map("projects")
+}
+
+// Project devlog entry. Evolved by: D3
+model Update {
+
+  id        String   @id @default(uuid()) @db.Uuid
+  projectId String   @db.Uuid
+  authorId  String   @db.Uuid
+  title     String   @db.VarChar(120)
+  body      String
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author  User    @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([projectId])
+  @@index([authorId])
+  @@map("updates")
+}
+
+// A user applies to collaborate on a project. Evolved by: D4
+model Collaboration {
+
+  id             String              @id @default(uuid()) @db.Uuid
+  projectId      String              @db.Uuid
+  collaboratorId String              @db.Uuid
+  role           String              @db.VarChar(80) // role inside the project (e.g. "UI design"), not the user's Role
+  description    String
+  startDate      DateTime            @db.Date
+  endDate        DateTime?           @db.Date
+  status         CollaborationStatus @default(pending)
+  repoLinks      String[]            @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  collaborator User    @relation(fields: [collaboratorId], references: [id], onDelete: Restrict)
+
+  @@index([projectId])
+  @@index([collaboratorId])
+  @@map("collaborations")
+}
+
+// Simulated sponsor contribution. Evolved by: D5
+model Contribution {
+
+  id            String             @id @default(uuid()) @db.Uuid
+  projectId     String             @db.Uuid
+  sponsorId     String             @db.Uuid
+  amount        Decimal            @db.Decimal(12, 2)
+  processingFee Decimal            @default(0) @db.Decimal(12, 2)
+  status        ContributionStatus @default(simulated)
+  createdAt     DateTime           @default(now())
+
+  // Restrict: money records must not vanish silently when a project or user is deleted
+  project Project @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  sponsor User    @relation(fields: [sponsorId], references: [id], onDelete: Restrict)
+
+  @@index([projectId])
+  @@index([sponsorId])
+  @@map("contributions")
+}

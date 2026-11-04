@@ -27,18 +27,13 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 COPY . .
 
-# generate no se conecta a la base, pero prisma.config.ts exige que la variable exista
-# (el if deja construir la imagen antes de que exista prisma/schema.prisma)
-RUN if [ -f prisma/schema.prisma ]; then \
-      DATABASE_URL="postgresql://build:build@localhost:5432/build" pnpm prisma generate; \
-    fi
+# generate never connects to the DB, but prisma.config.ts requires the variable to exist
+RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" pnpm prisma generate
 
 RUN pnpm run build
 
-# nest build solo compila TypeScript: el motor nativo de Prisma se copia junto al cliente compilado
-RUN if [ -d src/generated ]; then \
-      find src/generated -name '*.node' -exec cp {} dist/generated/prisma/ \; ; \
-    fi
+# nest build only compiles TypeScript: copy Prisma's native engine next to the compiled client
+RUN find src/generated -name '*.node' -exec cp {} dist/generated/prisma/ \;
 
 
 # ── runtime: solo lo necesario para ejecutar ─────────────────────
