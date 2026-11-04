@@ -13,3 +13,6 @@ coverage
 
 .vscode
 .idea
+
+
+src/generated
