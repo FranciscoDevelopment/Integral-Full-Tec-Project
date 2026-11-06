@@ -12,6 +12,23 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
   {
+    // Files written in the code style of the winter-eccom backend (spaces inside parentheses, "x : Type", ...).
+    // Prettier would rewrite them, so it is off here and the same paths are listed in .prettierignore
+    files: [
+      'src/auth/**/*.ts',
+      'src/users/**/*.ts',
+      'src/common/decorators/public.decorator.ts',
+      'src/common/decorators/auth.decorator.ts',
+      'src/common/dto/**/*.ts',
+      'src/common/hashing/**/*.ts',
+      'src/common/regex/**/*.ts',
+      'src/common/types/jwt.types.ts',
+    ],
+    rules: {
+      'prettier/prettier': 'off',
+    },
+  },
+  {
     languageOptions: {
       globals: {
         ...globals.node,
