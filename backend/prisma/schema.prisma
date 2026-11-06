@@ -81,6 +81,9 @@ model User {
   role     Role       @default(user)
   status   UserStatus @default(active)
 
+  // bcrypt(sha256(refresh token)): lets us revoke the refresh session. Back end only
+  hashedRefreshToken String?
+
   // sponsors only
   companyName String? @db.VarChar(100)
   logoUrl     String?
