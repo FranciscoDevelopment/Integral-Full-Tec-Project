@@ -11,6 +11,7 @@ import { AuthGuard } from './auth/guards/auth/auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { CollaborationsModule } from './collaborations/collaborations.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
     CommonModule,
     UsersModule,
     AuthModule,
+    CollaborationsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
