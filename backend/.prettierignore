@@ -1,0 +1,13 @@
+src/generated
+dist
+coverage
+
+# Code style of the winter-eccom backend (see the override in eslint.config.mjs)
+src/auth
+src/users
+src/common/decorators/public.decorator.ts
+src/common/decorators/auth.decorator.ts
+src/common/dto
+src/common/hashing
+src/common/regex
+src/common/types/jwt.types.ts
