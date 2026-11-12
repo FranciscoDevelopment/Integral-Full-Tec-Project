@@ -1,65 +1,146 @@
-import {
-  Controller,
-  Body,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors, ClassSerializerInterceptor, HttpCode, HttpStatus, UseGuards, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { AUTH_COOKIE_NAME } from '../common/constants/auth.constants';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { JwtPayload } from '../common/types/jwt-payload.type';
-import { SignInDto } from './dto/sign-in.dto';
-import { SignUpDto } from './dto/sign-up.dto';
+import { Throttle } from '@nestjs/throttler';
+import { CookieOptions, Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import { SigninDto } from './dto/signin.dto';
+import { RefreshTokenGuard, requestWithRefreshT } from './guards/refresh-token/refresh-token.guard';
+import { REFRESH_COOKIE_NAME, REFRESH_COOKIE_PATH } from './constants/auth-cookies.constants';
+import { readCookie } from './utils/read-cookie.util';
+import { Public } from 'src/common/decorators/public.decorator';
+import { AUTH_COOKIE_NAME } from 'src/common/constants/auth.constants';
+import { tokensT } from 'src/common/types/jwt.types';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
+
+@UseInterceptors( ClassSerializerInterceptor )
 @Controller('auth')
 export class AuthController {
+
   constructor(
     private readonly authService: AuthService,
-    private readonly config: ConfigService,
+    private readonly configService : ConfigService
   ) {}
 
+
+  @Public()
   @Post('signup')
-  signUp(@Body() dto: SignUpDto) {
-    return this.authService.signUp(dto);
+  async signup( @Body() signupDto : CreateUserDto, @Res( {passthrough: true} ) response : Response ) {
+
+    const { user, tokens } = await this.authService.signup( signupDto )
+
+    this.setSessionCookies( response, tokens ) ;
+
+
+    return {
+      user,
+      accessToken: tokens.accessToken,
+      expiresAt: tokens.accessExpiresAt
+    }
+
   }
 
+
+
+  @Public()
+  @Throttle( {default: {limit: 5, ttl: 60000}} )
   @Post('signin')
-  @HttpCode(HttpStatus.OK)
-  async signIn(
-    @Body() dto: SignInDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const { user, token, maxAge } = await this.authService.signIn(dto);
+  @HttpCode( HttpStatus.OK )
+  async signin( @Body() signinDto : SigninDto, @Res( {passthrough: true} ) response : Response ) {
 
-    response.cookie(AUTH_COOKIE_NAME, token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: this.config.get<string>('NODE_ENV') === 'production',
-      maxAge,
-      path: '/',
-    });
+    const { user, tokens } = await this.authService.signin( signinDto )
 
-    return { user };
+    this.setSessionCookies( response, tokens ) ;
+
+
+    return {
+      user,
+      accessToken: tokens.accessToken,
+      expiresAt: tokens.accessExpiresAt
+    }
+
   }
 
+
+  @Public()
+  @UseGuards( RefreshTokenGuard )
+  @Post('refresh')
+  @HttpCode( HttpStatus.OK )
+  async refresh( @Req() request : requestWithRefreshT, @Res( {passthrough: true} ) response : Response ) {
+
+    const tokens = await this.authService.refresh( request.user!.sub, request.refreshToken! )
+
+    this.setSessionCookies( response, tokens ) ;
+
+
+    return {
+      accessToken: tokens.accessToken,
+      expiresAt: tokens.accessExpiresAt
+    }
+
+  }
+
+
+  // Public on purpose: with an expired access token the user must still be able to log out
+  @Public()
   @Post('logout')
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtAuthGuard)
-  logOut(@CurrentUser() _user: JwtPayload, @Res() response: Response) {
-    response.clearCookie(AUTH_COOKIE_NAME, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: this.config.get<string>('NODE_ENV') === 'production',
-      path: '/',
-    });
-    response
-      .status(HttpStatus.OK)
-      .json({ message: 'Logged out successfully.' });
+  @HttpCode( HttpStatus.NO_CONTENT )
+  async logout( @Req() request : Request, @Res( {passthrough: true} ) response : Response ) {
+
+    await this.authService.logout( readCookie( request, REFRESH_COOKIE_NAME ) )
+
+    this.clearSessionCookies( response )
+
   }
+
+
+  private cookieOptions( path : string ) : CookieOptions {
+
+    return {
+
+      httpOnly: true,
+
+      sameSite: 'lax',
+
+      // true only when the API is served over HTTPS (COOKIE_SECURE=true in production)
+      secure: this.configService.get<string>('COOKIE_SECURE') === 'true',
+
+      path
+
+    }
+
+  }
+
+
+  private setSessionCookies( response : Response, tokens : tokensT ) {
+
+    response.cookie( AUTH_COOKIE_NAME, tokens.accessToken, {
+
+      ...this.cookieOptions('/'),
+
+      expires: tokens.accessExpiresAt
+
+    } )
+
+
+    response.cookie( REFRESH_COOKIE_NAME, tokens.refreshToken, {
+
+      ...this.cookieOptions( REFRESH_COOKIE_PATH ),
+
+      expires: tokens.refreshExpiresAt
+
+    } )
+
+  }
+
+
+  private clearSessionCookies( response : Response ) {
+
+    response.clearCookie( AUTH_COOKIE_NAME, this.cookieOptions('/') )
+
+    response.clearCookie( REFRESH_COOKIE_NAME, this.cookieOptions( REFRESH_COOKIE_PATH ) )
+
+  }
+
+
 }

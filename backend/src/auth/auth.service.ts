@@ -1,165 +1,211 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { Prisma } from '../generated/prisma/client';
-import { Role, UserStatus } from '../generated/prisma/enums';
-import { PrismaService } from '../prisma/prisma.service';
-import { SignInDto } from './dto/sign-in.dto';
-import { SignUpDto } from './dto/sign-up.dto';
-import { JwtPayload } from '../common/types/jwt-payload.type';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { UsersService } from 'src/users/users.service';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config'
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { SigninDto } from './dto/signin.dto';
+import { checkTheRespectiveKey, hashingKey } from 'src/common/hashing/hash-bcrypt';
+import { createHash } from 'node:crypto';
+import { JwtPayload } from 'src/common/types/jwt-payload.type';
+import { tokensT } from 'src/common/types/jwt.types';
+import { Role, UserStatus } from 'src/generated/prisma/enums';
 
-const authUserSelect = {
-  id: true,
-  name: true,
-  email: true,
-  role: true,
-  status: true,
-  companyName: true,
-  logoUrl: true,
-  website: true,
-  createdAt: true,
-  updatedAt: true,
-} satisfies Prisma.UserSelect;
 
-const signInErrorMessage = 'Invalid email or password.';
+// Compared against when the email does not exist, so the response time does not reveal which emails are registered
+const DUMMY_HASH = '$2b$10$zV.vkbrZhWyBoHDoV07HfOh1PmWKXB0iAoTyUX/cNrnFP1NgjbuxS' ;
+
 
 @Injectable()
 export class AuthService {
-  private readonly tokenExpirationSeconds: number;
 
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
-    config: ConfigService,
+    private readonly usersService : UsersService,
+    private readonly jwtService : JwtService,
+    private readonly configService : ConfigService
   ) {
-    this.tokenExpirationSeconds = parseTokenExpiration(
-      config.getOrThrow<string>('JWT_EXPIRES_IN'),
-    );
+
+    // Fail at startup, not at the first signin
+    for( const key of [ 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_EXPIRES_IN', 'JWT_REFRESH_EXPIRES_IN' ] ) {
+
+      if( !this.configService.get<string>(key) ) throw new Error( `Missing environment variable ${key}` ) ;
+
+    }
+
+
+    // With the same secret an access token would also pass as a refresh token
+    if( this.configService.get<string>('JWT_SECRET') === this.configService.get<string>('JWT_REFRESH_SECRET') ) {
+
+      throw new Error('JWT_SECRET and JWT_REFRESH_SECRET must be different')
+
+    }
+
   }
 
-  async signUp(dto: SignUpDto) {
-    const email = normalizeEmail(dto.email);
-    const password = await bcrypt.hash(dto.password, 10);
 
-    try {
-      return await this.prisma.user.create({
-        data: {
-          name: dto.name,
-          email,
-          password,
-          role: dto.role,
-          companyName: dto.role === Role.sponsor ? dto.companyName : null,
-          logoUrl: dto.role === Role.sponsor ? dto.logoUrl : null,
-          website: dto.role === Role.sponsor ? dto.website : null,
-        },
-        select: authUserSelect,
-      });
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException(
-          'An account with this email already exists.',
-        );
-      }
+  async signup( signupDto : CreateUserDto ) {
 
-      throw error;
-    }
-  }
+    const user = await this.usersService.create( signupDto ) ;
 
-  async signIn(dto: SignInDto): Promise<{
-    user: Prisma.UserGetPayload<{ select: typeof authUserSelect }>;
-    token: string;
-    maxAge: number;
-  }> {
-    const email = normalizeEmail(dto.email);
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-      select: {
-        ...authUserSelect,
-        password: true,
-      },
-    });
+    const tokens = await this.generateTokens( user.id, user.email, user.role )
 
-    if (!user || !(await bcrypt.compare(dto.password, user.password))) {
-      throw new UnauthorizedException(signInErrorMessage);
-    }
-
-    if (user.status === UserStatus.suspended) {
-      throw new UnauthorizedException(signInErrorMessage);
-    }
-
-    const payload: JwtPayload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    };
-    const token = await this.jwtService.signAsync(payload, {
-      expiresIn: this.tokenExpirationSeconds,
-    });
-
-    const safeUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      status: user.status,
-      companyName: user.companyName,
-      logoUrl: user.logoUrl,
-      website: user.website,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
 
     return {
-      user: safeUser,
-      token,
-      maxAge: this.tokenExpirationSeconds * 1000,
-    };
-  }
-}
+      user: new UserEntity( user ),
+      tokens
+    }
 
-function normalizeEmail(email: string): string {
-  return email.trim().toLowerCase();
-}
-
-function parseTokenExpiration(value: string): number {
-  const match =
-    /^(\d+)\s*(s|sec|seconds?|m|min|minutes?|h|hours?|d|days?)?$/i.exec(
-      value.trim(),
-    );
-
-  if (!match) {
-    throw new Error(
-      'JWT_EXPIRES_IN must be a positive number of seconds or a duration such as 15m.',
-    );
   }
 
-  const amount = Number(match[1]);
-  const unit = match[2]?.toLowerCase();
-  const multiplier =
-    unit === 'm' || unit?.startsWith('min')
-      ? 60
-      : unit === 'h' || unit?.startsWith('hour')
-        ? 3600
-        : unit === 'd' || unit?.startsWith('day')
-          ? 86400
-          : 1;
-  const seconds = amount * multiplier;
 
-  if (
-    !Number.isSafeInteger(seconds) ||
-    seconds <= 0 ||
-    !Number.isSafeInteger(seconds * 1000)
-  ) {
-    throw new Error('JWT_EXPIRES_IN must resolve to a positive safe duration.');
+  async signin( signinDto : SigninDto ) {
+
+    const user = await this.usersService.findByEmailWithPassword( signinDto.email ) ;
+
+
+    const passwordChecking = await checkTheRespectiveKey( signinDto.password, user?.password ?? DUMMY_HASH ) ;
+
+    if( !user || !passwordChecking ) throw new UnauthorizedException('Invalid credentials') ;
+
+
+    if( user.status === UserStatus.suspended ) throw new ForbiddenException('Your account is suspended') ;
+
+
+    const tokens = await this.generateTokens( user.id, user.email, user.role ) ;
+
+
+    return {
+      user: new UserEntity( user ),
+      tokens
+    }
+
   }
 
-  return seconds;
+
+  async refresh( userId : string, refreshToken : string ) {
+
+    const user = await this.usersService.findByIdWithRefreshToken(userId) ;
+
+    if( !user?.hashedRefreshToken ) throw new ForbiddenException('Access denied') ;
+
+
+    const coincide = await checkTheRespectiveKey( this.resume(refreshToken), user.hashedRefreshToken )
+
+    if( !coincide ) {
+
+      // A refresh token that is not the last one issued was already used: close the whole session
+      await this.usersService.updateRefreshToken( user.id, null ) ;
+
+      throw new ForbiddenException( 'Access denied' )
+
+    }
+
+
+    if( user.status === UserStatus.suspended ) {
+
+      await this.usersService.updateRefreshToken( user.id, null ) ;
+
+      throw new ForbiddenException('Your account is suspended')
+
+    }
+
+
+    return this.generateTokens( user.id, user.email, user.role )
+
+  }
+
+
+  // Best effort: with a missing, invalid or expired refresh token there is nothing left to revoke
+  async logout( refreshToken : string | undefined ) {
+
+    if( !refreshToken ) return ;
+
+
+    let payload : JwtPayload ;
+
+
+    try{
+
+      payload = await this.jwtService.verifyAsync<JwtPayload>( refreshToken, {
+
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET')
+
+      } )
+
+    }
+    catch {
+      return
+    }
+
+
+    await this.usersService.updateRefreshToken( payload.sub, null )
+
+  }
+
+
+  private async generateTokens( userId : string, email : string, role : Role ) : Promise<tokensT> {
+
+    const payload = {sub: userId, email, role} ;
+
+    const [ accessToken, refreshToken ] = await Promise.all(
+      [
+        this.jwtService.signAsync( payload, {
+
+          secret: this.configService.getOrThrow<string>('JWT_SECRET'),
+
+          expiresIn: this.expiresIn('JWT_EXPIRES_IN')
+
+        } )
+        ,
+        this.jwtService.signAsync( payload, {
+
+          secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+
+          expiresIn: this.expiresIn('JWT_REFRESH_EXPIRES_IN')
+
+        } )
+      ]
+    )
+
+
+    const hashedRefreshToken = await hashingKey( this.resume( refreshToken ) )
+
+
+    await this.usersService.updateRefreshToken( userId, hashedRefreshToken )
+
+
+    return {
+      accessToken,
+      refreshToken,
+      accessExpiresAt: this.expirationOf( accessToken ),
+      refreshExpiresAt: this.expirationOf( refreshToken )
+    }
+
+  }
+
+
+  // bcrypt only reads the first 72 bytes and every JWT starts with the same header: hash a digest instead
+  private resume( token : string ) {
+
+    return createHash('sha256').update(token).digest('hex')
+
+  }
+
+
+  private expiresIn( key : 'JWT_EXPIRES_IN' | 'JWT_REFRESH_EXPIRES_IN' ) {
+
+    return this.configService.getOrThrow<string>( key ) as JwtSignOptions['expiresIn']
+
+  }
+
+
+  private expirationOf( token : string ) {
+
+    const { exp } = this.jwtService.decode<{exp: number}>( token ) ;
+
+    return new Date( exp * 1000 )
+
+  }
+
+
 }
