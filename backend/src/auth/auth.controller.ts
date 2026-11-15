@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import { CookieOptions, Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { SigninDto } from './dto/signin.dto';
+import { LoginDto } from './dto/login.dto'; 
 import { RefreshTokenGuard, requestWithRefreshT } from './guards/refresh-token/refresh-token.guard';
 import { REFRESH_COOKIE_NAME, REFRESH_COOKIE_PATH } from './constants/auth-cookies.constants';
 import { readCookie } from './utils/read-cookie.util';
@@ -46,9 +46,9 @@ export class AuthController {
   @Throttle( {default: {limit: 5, ttl: 60000}} )
   @Post('signin')
   @HttpCode( HttpStatus.OK )
-  async signin( @Body() signinDto : SigninDto, @Res( {passthrough: true} ) response : Response ) {
+  async signin( @Body() loginDto : LoginDto, @Res( {passthrough: true} ) response : Response ) {
 
-    const { user, tokens } = await this.authService.signin( signinDto )
+    const { user, tokens } = await this.authService.signin( loginDto )
 
     this.setSessionCookies( response, tokens ) ;
 

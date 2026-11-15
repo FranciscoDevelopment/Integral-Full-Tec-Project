@@ -1,4 +1,4 @@
-import { IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, IsUrl, Matches, MaxLength, MinLength, ValidateIf } from 'class-validator';
+import { IsByteLength, IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, IsUrl, Matches, MaxLength, MinLength, ValidateIf } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { passwordRegex } from 'src/common/regex/some-regex';
 import { Role } from 'src/generated/prisma/enums';
@@ -20,7 +20,7 @@ export class CreateUserDto {
 
     @IsString()
     @MinLength( 8, {message: "The password must be at least 8 characters long"} )
-    @MaxLength( 72, {message: "The password is too long"} )
+    @IsByteLength( 1, 72, {message: "The password is too long"} )   // bcrypt only reads the first 72 BYTES
     @Matches( passwordRegex, {message: "The password must contain uppercase letters, lowercase letters, and numbers."} )
     password! : string
 
