@@ -4,7 +4,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config'
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { SigninDto } from './dto/signin.dto';
+import { LoginDto } from './dto/login.dto'; 
 import { checkTheRespectiveKey, hashingKey } from 'src/common/hashing/hash-bcrypt';
 import { createHash } from 'node:crypto';
 import { JwtPayload } from 'src/common/types/jwt-payload.type';
@@ -58,12 +58,12 @@ export class AuthService {
   }
 
 
-  async signin( signinDto : SigninDto ) {
+  async signin( LoginDto : LoginDto ) {
 
-    const user = await this.usersService.findByEmailWithPassword( signinDto.email ) ;
+    const user = await this.usersService.findByEmailWithPassword( LoginDto.email ) ;
 
 
-    const passwordChecking = await checkTheRespectiveKey( signinDto.password, user?.password ?? DUMMY_HASH ) ;
+    const passwordChecking = await checkTheRespectiveKey( LoginDto.password, user?.password ?? DUMMY_HASH ) ;
 
     if( !user || !passwordChecking ) throw new UnauthorizedException('Invalid credentials') ;
 

@@ -2,12 +2,13 @@ import { Transform } from 'class-transformer';
 import {
   IsByteLength,
   IsEmail,
+  IsNotEmpty,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-export class SignInDto {
+export class LoginDto {
   @Transform(({ value }: { value: unknown }) =>
     typeof value === 'string' ? value.trim().toLowerCase() : value,
   )
@@ -16,8 +17,7 @@ export class SignInDto {
   email!: string;
 
   @IsString()
-  @MinLength(8)
-  @MaxLength(72)
-  @IsByteLength(1, 72)
+  @IsNotEmpty( {message: "The password is required"} )
+  @IsByteLength( 1, 72, {message: "The password is too long"} )   // otherwise bcrypt would truncate and accept a longer string
   password!: string;
 }
