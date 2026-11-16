@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -12,6 +13,15 @@ import { CollaborationStatus, ProjectStatus } from 'src/generated/prisma/enums';
 import { canTransition } from './collaboration-transitions';
 import { CreateCollaborationDto } from './dto/create-collaboration.dto';
 import { UpdateCollaborationStatusDto } from './dto/update-collaboration-status.dto';
+
+// Only public fields: never expose the email or the password of the collaborator
+const WITH_COLLABORATOR = {
+  collaborator: { select: { id: true, name: true } },
+} satisfies Prisma.CollaborationInclude;
+
+const WITH_PROJECT = {
+  project: { select: { id: true, title: true, kind: true } },
+} satisfies Prisma.CollaborationInclude;
 
 @Injectable()
 export class CollaborationsService {
@@ -36,6 +46,12 @@ export class CollaborationsService {
     }
     if (project.status !== ProjectStatus.active) {
       throw new ConflictException('Project is not accepting collaborators');
+    }
+
+    const startDate = new Date(dto.startDate);
+    const endDate = dto.endDate ? new Date(dto.endDate) : null;
+    if (endDate && endDate < startDate) {
+      throw new BadRequestException('endDate must not be before startDate');
     }
 
     const existing = await this.prisma.collaboration.findFirst({
@@ -63,15 +79,15 @@ export class CollaborationsService {
         collaboratorId: user.sub,
         role: dto.role,
         description: dto.description,
-        startDate: new Date(dto.startDate),
-        endDate: dto.endDate ? new Date(dto.endDate) : null,
+        startDate,
+        endDate,
         repoLinks: dto.repoLinks ?? [],
       },
     });
   }
 
   async findMine(user: JwtPayload, query: PaginationQueryDto) {
-    return this.paginate({ collaboratorId: user.sub }, query);
+    return this.paginate({ collaboratorId: user.sub }, query, WITH_PROJECT);
   }
 
   async findByProject(
@@ -86,13 +102,14 @@ export class CollaborationsService {
     if (project.ownerId !== user.sub) {
       throw new ForbiddenException('Only the project owner can see this');
     }
-    return this.paginate({ projectId }, query);
+    return this.paginate({ projectId }, query, WITH_COLLABORATOR);
   }
 
   async findConfirmedByUser(userId: string, query: PaginationQueryDto) {
     return this.paginate(
       { collaboratorId: userId, status: CollaborationStatus.confirmed },
       query,
+      WITH_PROJECT,
     );
   }
 
@@ -122,6 +139,7 @@ export class CollaborationsService {
     return this.prisma.collaboration.update({
       where: { id },
       data: { status: dto.status },
+      include: WITH_COLLABORATOR,
     });
   }
 
@@ -142,12 +160,13 @@ export class CollaborationsService {
   private async paginate(
     where: Prisma.CollaborationWhereInput,
     query: PaginationQueryDto,
+    include: Prisma.CollaborationInclude,
   ) {
-    const page = query.page ?? 1;
-    const limit = query.limit ?? 10;
+    const { page, limit } = query;
     const [data, total] = await Promise.all([
       this.prisma.collaboration.findMany({
         where,
+        include,
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
