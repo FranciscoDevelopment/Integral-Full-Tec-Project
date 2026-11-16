@@ -8,10 +8,7 @@ import { Prisma } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtPayload } from 'src/common/types/jwt-payload.type';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import {
-  CollaborationStatus,
-  ProjectStatus,
-} from 'src/generated/prisma/enums';
+import { CollaborationStatus, ProjectStatus } from 'src/generated/prisma/enums';
 import { canTransition } from './collaboration-transitions';
 import { CreateCollaborationDto } from './dto/create-collaboration.dto';
 import { UpdateCollaborationStatusDto } from './dto/update-collaboration-status.dto';

@@ -1,7 +1,15 @@
-import { ArrayMaxSize, IsArray, IsDateString, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateCollaborationDto {
-
   @IsString()
   @IsNotEmpty()
   @MaxLength(80)
@@ -24,5 +32,4 @@ export class CreateCollaborationDto {
   @ArrayMaxSize(10)
   @IsUrl({}, { each: true })
   repoLinks?: string[];
-
 }
