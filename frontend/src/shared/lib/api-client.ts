@@ -124,13 +124,21 @@ async function send ( path : string, method : HttpMethodT, options : RequestOpti
 
 }
 
-
+// true: session renewed. false: the API refused (401/403), there is no session to renew.
+// Anything else (network, 5xx) says nothing about the session: it is thrown as it is
 function refreshSession () : Promise<boolean> {
 
     refreshInFlight ??= send( "/auth/refresh", "POST", {} )
 
-        .then( response => response.ok )
-        .catch( () => false )
+        .then( response => {
+
+            if( response.ok ) return true ;
+
+            if( response.status === 401 || response.status === 403 ) return false ;
+
+            throw new ApiError( response.status, "Could not renew the session." ) ;
+
+        } )
         .finally( () => {
 
             refreshInFlight = null ;
@@ -141,6 +149,7 @@ function refreshSession () : Promise<boolean> {
     return refreshInFlight ;
 
 }
+
 
 
 async function apiRequest<T> ( path : string, method : HttpMethodT, options : RequestOptionsT = {} ) : Promise<T> {
