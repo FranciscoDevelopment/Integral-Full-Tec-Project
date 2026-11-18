@@ -4,6 +4,7 @@ import { toOptions } from "./to-options";
 export const ROLE_LABELS: Record<Role, string> = {
   admin: "Administrador",
   user: "Usuario",
+  sponsor: "Sponsor",
 };
 
 export const ROLE_OPTIONS = toOptions(ROLES, ROLE_LABELS);

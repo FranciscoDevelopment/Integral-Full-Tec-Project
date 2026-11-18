@@ -1,0 +1,4 @@
+allowBuilds:
+  # Its postinstall only downloads the native binding when the optional
+  # platform package is missing; pnpm already installs that package.
+  unrs-resolver: false

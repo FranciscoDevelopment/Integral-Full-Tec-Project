@@ -2,12 +2,13 @@
 
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
+import { SessionProvider } from "@/features/auth/components/session-provider";
 
-// Single place for app-wide client providers. D2 adds the session store rehydration here.
+// App-wide providers for shared client state.
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <>
-      {children}
+      <SessionProvider>{children}</SessionProvider>
       <Toaster position="bottom-center" richColors closeButton />
     </>
   );

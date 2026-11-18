@@ -5,23 +5,25 @@ Next.js replica of the Programadores Argentina community site. Part A of the MVP
 ## Requirements
 
 - Node.js 20.9 or newer (Next.js 16)
-- npm
+- pnpm 11 (same as the backend; the version is pinned in `packageManager`)
 
 ## Getting started
 
 ```bash
 cd frontend
-npm install
-npm run dev        # http://localhost:3000
+pnpm install
+pnpm dev           # http://localhost:3000
 ```
 
-| Script              | What it does                         |
-| ------------------- | ------------------------------------ |
-| `npm run dev`       | Development server                   |
-| `npm run build`     | Production build                     |
-| `npm run start`     | Serves the production build          |
-| `npm run lint`      | ESLint (flat config)                 |
-| `npm run typecheck` | `tsc --noEmit`                       |
+Use pnpm only. Running `npm install` here would create a `package-lock.json` and an npm-style `node_modules` that pnpm later has to move aside and reinstall.
+
+| Script           | What it does                         |
+| ---------------- | ------------------------------------ |
+| `pnpm dev`       | Development server                   |
+| `pnpm build`     | Production build                     |
+| `pnpm start`     | Serves the production build          |
+| `pnpm lint`      | ESLint (flat config)                 |
+| `pnpm typecheck` | `tsc --noEmit`                       |
 
 ## Stack
 

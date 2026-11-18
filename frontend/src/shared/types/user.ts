@@ -6,5 +6,10 @@ export interface User {
   name: string;
   email: string;
   role: Role;
+  status: "active" | "suspended";
+  companyName: string | null;
+  logoUrl: string | null;
+  website: string | null;
   createdAt: string;
+  updatedAt: string;
 }
