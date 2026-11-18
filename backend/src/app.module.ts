@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ContributionsModule } from './contributions/contributions.module';
+import { AdminUsersModule } from './admin-users/admin-users.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ContributionsModule } from './contributions/contributions.module';
     AuthModule,
     ProjectsModule,
     ContributionsModule,
+    AdminUsersModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
