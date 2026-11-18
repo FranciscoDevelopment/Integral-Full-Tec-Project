@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from 'src/generated/prisma/client';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserStatus } from 'src/generated/prisma/enums';
 
 const ADMIN_USER_SELECT = {
   id: true,
@@ -34,5 +35,19 @@ export class AdminUsersService {
     ]);
 
     return { data, meta: { total, page, limit } };
+  }
+
+  async updateStatus(id: string, status: UserStatus) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.prisma.user.update({
+      where: { id },
+      data: { status },
+      select: ADMIN_USER_SELECT,
+    });
   }
 }
