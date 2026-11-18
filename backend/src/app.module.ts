@@ -12,6 +12,7 @@ import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ProjectsModule } from './projects/projects.module';
+import { ContributionsModule } from './contributions/contributions.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ProjectsModule } from './projects/projects.module';
     UsersModule,
     AuthModule,
     ProjectsModule,
+    ContributionsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
