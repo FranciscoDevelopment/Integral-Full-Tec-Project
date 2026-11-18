@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto'; 
 import { RefreshTokenGuard, requestWithRefreshT } from './guards/refresh-token/refresh-token.guard';
 import { REFRESH_COOKIE_NAME, REFRESH_COOKIE_PATH } from './constants/auth-cookies.constants';
+import { SIGNIN_THROTTLE, SIGNUP_THROTTLE } from './constants/auth-throttle.constants';
 import { readCookie } from './utils/read-cookie.util';
 import { Public } from 'src/common/decorators/public.decorator';
 import { AUTH_COOKIE_NAME } from 'src/common/constants/auth.constants';
@@ -24,6 +25,7 @@ export class AuthController {
 
 
   @Public()
+  @Throttle( SIGNUP_THROTTLE )
   @Post('signup')
   async signup( @Body() signupDto : CreateUserDto, @Res( {passthrough: true} ) response : Response ) {
 
@@ -43,7 +45,7 @@ export class AuthController {
 
 
   @Public()
-  @Throttle( {default: {limit: 5, ttl: 60000}} )
+  @Throttle( SIGNIN_THROTTLE )
   @Post('signin')
   @HttpCode( HttpStatus.OK )
   async signin( @Body() loginDto : LoginDto, @Res( {passthrough: true} ) response : Response ) {
