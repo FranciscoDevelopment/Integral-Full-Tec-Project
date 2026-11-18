@@ -189,6 +189,8 @@ export function getErrorMessage ( error : unknown ) : string {
 
     if( error.status === 404 ) return "No encontramos lo que buscás." ;
 
+    if( error.status === 429 ) return "Demasiados intentos. Esperá unos minutos y probá de nuevo." ;
+
     if( error.status >= 500 ) return "Algo salió mal en el servidor. Probá de nuevo en un rato." ;
 
 
