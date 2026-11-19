@@ -49,7 +49,12 @@ export function AccountMenu({
           isMobile ? "h-[5.5rem]" : "h-8 w-48",
         )}
       >
-        <span className={cn("h-full rounded-lg bg-slate-100", isMobile ? "w-full" : "flex-1")} />
+        <span
+          className={cn(
+            "h-full rounded-lg bg-slate-100",
+            isMobile ? "w-full" : "flex-1",
+          )}
+        />
       </div>
     );
   }
@@ -69,7 +74,11 @@ export function AccountMenu({
         <Link
           href={REGISTER_HREF}
           onClick={onNavigate}
-          className={buttonStyles({ variant: "outline", size, className: itemClasses })}
+          className={buttonStyles({
+            variant: "outline",
+            size,
+            className: itemClasses,
+          })}
         >
           Registrarme
         </Link>
@@ -96,7 +105,12 @@ export function AccountMenu({
 
   return (
     <div className={containerClasses}>
-      <div className={cn("flex min-w-0 items-center gap-2", isMobile && "px-3 py-1")}>
+      <div
+        className={cn(
+          "flex min-w-0 items-center gap-2",
+          isMobile && "px-3 py-1",
+        )}
+      >
         <span
           title={name}
           className={cn(
@@ -110,6 +124,19 @@ export function AccountMenu({
           {ROLE_LABELS[role]}
         </Badge>
       </div>
+      {role === "sponsor" && (
+        <Link
+          href="/me/contributions"
+          onClick={onNavigate}
+          className={buttonStyles({
+            variant: "outline",
+            size,
+            className: itemClasses,
+          })}
+        >
+          Mis aportes
+        </Link>
+      )}
       <Button
         variant="outline"
         size={size}
