@@ -11,6 +11,9 @@ import { AuthGuard } from './auth/guards/auth/auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ProjectsModule } from './projects/projects.module';
+import { ContributionsModule } from './contributions/contributions.module';
+import { AdminUsersModule } from './admin-users/admin-users.module';
 import { CollaborationsModule } from './collaborations/collaborations.module';
 
 @Module({
@@ -22,6 +25,9 @@ import { CollaborationsModule } from './collaborations/collaborations.module';
     CommonModule,
     UsersModule,
     AuthModule,
+    ProjectsModule,
+    ContributionsModule,
+    AdminUsersModule,
     CollaborationsModule,
   ],
   controllers: [AppController, HealthController],
