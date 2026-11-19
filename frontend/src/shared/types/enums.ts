@@ -1,7 +1,7 @@
 // Enum values are part of the front/back contract: English snake_case, same on both sides.
 // Spanish UI labels live in shared/catalogs.
 
-export const ROLES = ["admin", "user"] as const;
+export const ROLES = ["admin", "user", "sponsor"] as const;
 export type Role = (typeof ROLES)[number];
 
 export const OFFER_STATUSES = ["pending", "approved", "rejected"] as const;
