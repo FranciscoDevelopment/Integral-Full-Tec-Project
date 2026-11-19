@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { originCheck } from './common/middleware/origin-check.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -24,13 +25,22 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
+  // Without the trailing slash: the browser sends the Origin header without it, and an
+  // "https://front.app/" typed in the hosting panel would never match
+  const frontendUrl = config
+    .get<string>('FRONTEND_URL', 'http://localhost:3000')
+    .replace(/\/+$/, '');
+
   app.enableCors({
-    origin: config.get<string>('FRONTEND_URL', 'http://localhost:3000'),
+    origin: frontendUrl,
 
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 
     credentials: true,
   });
+
+  // The cookies are SameSite=None in production: unsafe requests must come from the front
+  app.use(originCheck(frontendUrl));
 
   app.useGlobalPipes(
     new ValidationPipe({
