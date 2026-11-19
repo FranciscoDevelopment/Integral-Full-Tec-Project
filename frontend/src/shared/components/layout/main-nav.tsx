@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
-import { buttonStyles } from "@/shared/components/ui/button";
-import { LOGIN_HREF, NAV_ITEMS, type NavItem } from "./nav-items";
+import { AccountMenu } from "@/features/auth/components/account-menu";
+import { NAV_ITEMS, type NavItem } from "./nav-items";
 
 const MOBILE_MENU_ID = "mobile-menu";
 
@@ -166,14 +166,7 @@ function MobilePanel({
           </li>
         ))}
       </ul>
-      {/* D2 replaces this with the session-aware account menu. */}
-      <Link
-        href={LOGIN_HREF}
-        onClick={onNavigate}
-        className={buttonStyles({ className: "mt-3 w-full" })}
-      >
-        Ingresar a mi cuenta
-      </Link>
+      <AccountMenu variant="mobile" onNavigate={onNavigate} className="mt-3" />
     </div>
   );
 }
@@ -205,13 +198,7 @@ export function MainNav() {
             </NavLink>
           ),
         )}
-        {/* D2 replaces this with the session-aware account menu. */}
-        <Link
-          href={LOGIN_HREF}
-          className={buttonStyles({ size: "sm", className: "ml-2" })}
-        >
-          Ingresar a mi cuenta
-        </Link>
+        <AccountMenu className="ml-2" />
       </nav>
 
       <button
