@@ -42,7 +42,7 @@ export function SiteHeader() {
 
         {/* usePathname suspends on routes whose params are unknown at build time
             (/go/[id], /jobs/[id]), so the nav needs its own boundary. */}
-        <Suspense fallback={<div aria-hidden className="h-10 w-10 md:w-[36rem]" />}>
+        <Suspense fallback={<div aria-hidden className="h-10 w-10 md:w-[28rem]" />}>
           <MainNav />
         </Suspense>
       </div>
