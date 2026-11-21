@@ -11,17 +11,18 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { label: "Últimas novedades", href: "/news" },
+  { label: "Novedades", href: "/news" },
+  { label: "Enlaces", href: "/links" },
   {
-    label: "Ofertas laborales",
-    href: "/jobs",
+    label: "Proyectos",
+    href: "/projects",
     children: [
-      { label: "Buscar trabajos", href: "/jobs" },
-      { label: "Publicar oferta", href: "/jobs/new" },
-      { label: "Configurar alertas", href: "/jobs/alerts" },
+      { label: "Proponer proyecto", href: "/projects/new" },
+      { label: "Compartir proyecto en avance", href: "/projects/alerts" },
+      { label: "Explorar proyectos", href: "/projects" },
+      { label: "Publicar alertas", href: "/projects/alerts" },
     ],
   },
-  { label: "Enlaces", href: "/links" },
   { label: "Contacto", href: "/contact" },
 ];
 
