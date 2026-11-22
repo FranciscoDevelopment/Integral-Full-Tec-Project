@@ -57,6 +57,7 @@ export function CollaborationRequestForm({
 
   return (
     <form
+      aria-label="Solicitud de colaboración"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       className="flex flex-col gap-4"
@@ -91,7 +92,8 @@ export function CollaborationRequestForm({
         />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <fieldset className="grid gap-4 sm:grid-cols-2">
+        <legend className="sr-only">Período de la colaboración</legend>
         <Input
           type="date"
           label="Fecha de inicio"
@@ -104,7 +106,7 @@ export function CollaborationRequestForm({
           error={errors.endDate?.message}
           {...register("endDate")}
         />
-      </div>
+      </fieldset>
 
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Enviando..." : "Enviar solicitud"}
