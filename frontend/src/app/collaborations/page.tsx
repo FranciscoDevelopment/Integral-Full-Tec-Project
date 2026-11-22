@@ -1,11 +1,13 @@
-
 import type { Metadata } from "next";
 import { Suspense } from "react";
+
 import { RequireAuth } from "@/features/auth/components/require-auth";
 import { MyCollaborationsList } from "@/features/collaborations/components/my-collaborations-list";
-import { LoadingState } from "@/features/collaborations/components/loading-state";
+import { LoadingState } from "@/shared/components/ui";
 
-export const metadata: Metadata = { title: "Mis colaboraciones" };
+export const metadata: Metadata = {
+  title: "Mis colaboraciones",
+};
 
 export default function MyCollaborationsPage() {
   return (
@@ -25,6 +27,7 @@ export default function MyCollaborationsPage() {
           solicitud.
         </p>
       </header>
+
       <Suspense fallback={<LoadingState label="Verificando sesión..." />}>
         <RequireAuth>
           <MyCollaborationsList />
