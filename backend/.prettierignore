@@ -8,6 +8,7 @@ src/users
 src/common/decorators/public.decorator.ts
 src/common/decorators/auth.decorator.ts
 src/common/dto
+src/common/filters
 src/common/hashing
 src/common/regex
 src/common/types/jwt.types.ts
