@@ -18,18 +18,18 @@ export function EmptyState({
   className,
 }: EmptyStateProps) {
   return (
-    <div
+    <section
       className={cn(
         "flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-300 px-6 py-12 text-center",
         className,
       )}
     >
-      {icon && <div className="text-slate-400">{icon}</div>}
+      {icon && <article className="text-slate-400">{icon}</article>}
       <p className="text-base font-semibold text-slate-900">{title}</p>
       {description && (
         <p className="max-w-md text-sm text-slate-600">{description}</p>
       )}
       {action}
-    </div>
+    </section>
   );
 }

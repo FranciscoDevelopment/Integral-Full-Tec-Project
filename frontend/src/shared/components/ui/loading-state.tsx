@@ -12,13 +12,13 @@ export function LoadingState ( { label = "Cargando...", className } : LoadingSta
 
     return(
 
-        <div role="status" aria-live="polite" className={cn( "flex items-center justify-center gap-2 py-12 text-sm text-slate-600", className )}>
+        <article role="status" aria-live="polite" className={cn( "flex items-center justify-center gap-2 py-12 text-sm text-slate-600", className )}>
 
             <LoaderCircle aria-hidden className="size-4 animate-spin" />
 
             {label}
 
-        </div>
+        </article>
 
     )
 

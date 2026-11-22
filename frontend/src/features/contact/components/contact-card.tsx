@@ -4,12 +4,16 @@ import { CONTACT_EMAIL } from "@/shared/constants/site";
 import { CopyEmailButton } from "./copy-email-button";
 
 export function ContactCard() {
+  
   return (
     <Card className="flex max-w-xl flex-col gap-4">
+
       <span className="flex size-12 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
         <Mail aria-hidden className="size-6" />
       </span>
-      <div className="flex flex-col gap-1">
+
+      <article className="flex flex-col gap-1">
+
         <h2 className="text-lg font-semibold text-slate-900">
           Escribinos por mail
         </h2>
@@ -19,10 +23,15 @@ export function ContactCard() {
         >
           {CONTACT_EMAIL}
         </a>
-      </div>
-      <div>
+
+      </article>
+
+      <article>
+
         <CopyEmailButton email={CONTACT_EMAIL} />
-      </div>
+
+      </article>
+
     </Card>
   );
 }

@@ -53,7 +53,7 @@ function NavLink({
 
 function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const menuId = useId();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
   }, [open]);
 
   return (
-    <div ref={containerRef} className="relative">
+    <section ref={containerRef} className="relative">
       <button
         type="button"
         aria-expanded={open}
@@ -113,7 +113,7 @@ function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -125,7 +125,7 @@ function MobilePanel({
   onNavigate: () => void;
 }) {
   return (
-    <div
+    <section
       id={MOBILE_MENU_ID}
       className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-slate-200 bg-white px-4 pb-4 shadow-lg md:hidden"
     >
@@ -167,7 +167,7 @@ function MobilePanel({
         ))}
       </ul>
       <AccountMenu variant="mobile" onNavigate={onNavigate} className="mt-3" />
-    </div>
+    </section>
   );
 }
 
