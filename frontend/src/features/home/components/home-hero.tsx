@@ -22,9 +22,22 @@ export function HomeHero () {
 
                 <div className="flex flex-wrap items-center justify-center gap-3">
 
+                {/*
                     <Link href="/register" className={buttonStyles( { size: "lg" } )}>Crear cuenta</Link>
 
                     <Link href={LOGIN_HREF} className={buttonStyles( { size: "lg", variant: "outline" } )}>Ingresar</Link>
+                */}
+
+                    <Link href="/register" className={buttonStyles({ size: "lg" })}>
+                        Crear cuenta
+                    </Link>
+                    <Link
+                        href={LOGIN_HREF}
+                        className={buttonStyles({ size: "lg", variant: "outline" })}
+                    >
+                        Ingresar
+                    </Link>
+
 
                 </div>
 
