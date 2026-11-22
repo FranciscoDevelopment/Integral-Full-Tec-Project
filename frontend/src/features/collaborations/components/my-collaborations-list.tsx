@@ -1,3 +1,4 @@
+"use client";
 import { toast } from "sonner";
 import { Button, ErrorState, LoadingState } from "@/shared/components/ui";
 import { EmptyState } from "@/shared/components/ui/empty-state";
