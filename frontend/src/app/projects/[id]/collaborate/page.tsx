@@ -2,8 +2,7 @@
 import { Suspense } from "react";
 import { RequireAuth } from "@/features/auth/components/require-auth";
 import { CollaborationRequestForm } from "@/features/collaborations/components/collaboration-request-form";
-import { LoadingState } from "@/features/collaborations/components/loading-state";
-
+import { LoadingState } from "@/shared/components/ui";
 async function FormContent({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return <CollaborationRequestForm projectId={id} />;

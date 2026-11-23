@@ -1,15 +1,14 @@
-
 "use client";
 
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import {
   Button,
-  EmptyState,
+  ErrorState,
+  LoadingState,
   type ButtonVariant,
 } from "@/shared/components/ui";
-import { ErrorState } from "./error-state";
-import { LoadingState } from "./loading-state";
+import { EmptyState } from "@/shared/components/ui/empty-state";
 import {
   getErrorMessage,
   getProjectCollaborations,
