@@ -1,10 +1,7 @@
-
 "use client";
-
 import { toast } from "sonner";
-import { Button, EmptyState } from "@/shared/components/ui";
-import { ErrorState } from "./error-state";
-import { LoadingState } from "./loading-state";
+import { Button, ErrorState, LoadingState } from "@/shared/components/ui";
+import { EmptyState } from "@/shared/components/ui/empty-state";
 import {
   getErrorMessage,
   getMyCollaborations,

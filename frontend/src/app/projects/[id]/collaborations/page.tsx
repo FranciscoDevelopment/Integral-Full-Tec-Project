@@ -2,8 +2,7 @@
 import { Suspense } from "react";
 import { RequireAuth } from "@/features/auth/components/require-auth";
 import { ReceivedRequestsList } from "@/features/collaborations/components/received-requests-list";
-import { LoadingState } from "@/features/collaborations/components/loading-state";
-
+import { LoadingState } from "@/shared/components/ui";
 async function ReceivedContent({
   params,
 }: {
