@@ -37,13 +37,13 @@ export function HowItWorksSection () {
 
         <PageContainer className="flex flex-col gap-8 py-12">
 
-            <div className="flex flex-col gap-1 text-center">
+            <header className="flex flex-col gap-1 text-center">
 
                 <h2 className="text-2xl font-bold tracking-tight text-slate-900">¿Cómo funciona?</h2>
 
                 <p className="text-slate-600">Tres pasos, de tu idea al proyecto en marcha. En un ámbito colaborativo</p>
 
-            </div>
+            </header>
 
             <ul className="grid gap-4 sm:grid-cols-3">
 

@@ -10,7 +10,7 @@ export function HomeHero () {
 
         <section className="bg-gradient-to-b from-brand-50 to-white">
 
-            <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6 sm:py-24">
+            <section className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6 sm:py-24">
 
                 <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
 
@@ -20,15 +20,29 @@ export function HomeHero () {
 
                 <p className="max-w-2xl text-lg text-slate-600 sm:text-xl">{SITE_TAGLINE}</p>
 
-                <div className="flex flex-wrap items-center justify-center gap-3">
+                <article className="flex flex-wrap items-center justify-center gap-3">
 
+                {/*
                     <Link href="/register" className={buttonStyles( { size: "lg" } )}>Crear cuenta</Link>
 
                     <Link href={LOGIN_HREF} className={buttonStyles( { size: "lg", variant: "outline" } )}>Ingresar</Link>
+                */}
 
-                </div>
+                    <Link href="/register" className={buttonStyles({ size: "lg" })}>
+                        Crear cuenta
+                    </Link>
+                    
+                    <Link
+                        href={LOGIN_HREF}
+                        className={buttonStyles({ size: "lg", variant: "outline" })}
+                    >
+                        Ingresar
+                    </Link>
 
-            </div>
+
+                </article>
+
+            </section>
 
         </section>
 

@@ -7,7 +7,7 @@ import { MainNav } from "./main-nav";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+      <section className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
         
         {/*
         <Link
@@ -24,7 +24,7 @@ export function SiteHeader() {
         </Link>
         */}
 
-        <div className="flex items-center gap-5">
+        <article className="flex items-center gap-5">
           <Link
             href="/"
             className="flex items-center gap-2 whitespace-nowrap font-semibold text-slate-900"
@@ -37,15 +37,15 @@ export function SiteHeader() {
           <p className="hidden whitespace-nowrap text-sm text-stone-600 xl:block">
             {SITE_SUB_TITLE}
           </p>
-        </div>
+        </article>
 
 
         {/* usePathname suspends on routes whose params are unknown at build time
             (/go/[id], /jobs/[id]), so the nav needs its own boundary. */}
-        <Suspense fallback={<div aria-hidden className="h-10 w-10 md:w-[36rem]" />}>
+        <Suspense fallback={<aside aria-hidden className="h-10 w-10 md:w-[28rem]" />}>
           <MainNav />
         </Suspense>
-      </div>
+      </section>
     </header>
   );
 }

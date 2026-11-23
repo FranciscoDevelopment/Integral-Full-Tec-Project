@@ -18,7 +18,7 @@ interface FieldProps {
 // Label + control + error/hint. The control wires aria-describedby using describedById().
 export function Field({ controlId, label, hint, error, children }: FieldProps) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <section className="flex flex-col gap-1.5">
       {label && (
         <label
           htmlFor={controlId}
@@ -37,7 +37,7 @@ export function Field({ controlId, label, hint, error, children }: FieldProps) {
           {hint}
         </p>
       ) : null}
-    </div>
+    </section>
   );
 }
 

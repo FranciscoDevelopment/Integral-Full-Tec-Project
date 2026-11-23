@@ -10,8 +10,8 @@ import { NAV_ITEMS, type NavItem } from "./nav-items";
 
 const MOBILE_MENU_ID = "mobile-menu";
 
-const LINK_CLASSES =
-  "rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900";
+const LINK_CLASSES = "whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900";
+
 const ACTIVE_LINK_CLASSES = "bg-brand-50 text-brand-800";
 
 function isActive(pathname: string, href: string, exact: boolean): boolean {
@@ -53,7 +53,7 @@ function NavLink({
 
 function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const menuId = useId();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
   }, [open]);
 
   return (
-    <div ref={containerRef} className="relative">
+    <section ref={containerRef} className="relative">
       <button
         type="button"
         aria-expanded={open}
@@ -96,7 +96,7 @@ function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
       {open && (
         <ul
           id={menuId}
-          className="absolute left-0 top-full z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg"
+          className="absolute left-0 top-full z-50 mt-2 w-max min-w-56 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg"
         >
           {item.children?.map((child) => (
             <li key={child.href}>
@@ -113,7 +113,7 @@ function DesktopGroup({ item, pathname }: { item: NavItem; pathname: string }) {
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -125,7 +125,7 @@ function MobilePanel({
   onNavigate: () => void;
 }) {
   return (
-    <div
+    <section
       id={MOBILE_MENU_ID}
       className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-slate-200 bg-white px-4 pb-4 shadow-lg md:hidden"
     >
@@ -167,7 +167,7 @@ function MobilePanel({
         ))}
       </ul>
       <AccountMenu variant="mobile" onNavigate={onNavigate} className="mt-3" />
-    </div>
+    </section>
   );
 }
 
@@ -188,7 +188,7 @@ export function MainNav() {
 
   return (
     <>
-      <nav aria-label="Principal" className="hidden items-center gap-1 md:flex">
+      <nav aria-label="Principal" className="ml-auto hidden items-center gap-1 md:flex">
         {NAV_ITEMS.map((item) =>
           item.children ? (
             <DesktopGroup key={item.href} item={item} pathname={pathname} />
