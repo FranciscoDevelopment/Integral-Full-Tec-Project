@@ -9,15 +9,15 @@ export interface ContributionFeeBreakdown {
 }
 
 function toCents(amount: string): number {
-  if (!/^[1-9]\d*\.\d{2}$/.test(amount)) {
+  if (!/^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(amount)) {
     throw new Error('Invalid contribution amount');
   }
 
-  const [whole, fraction] = amount.split('.');
-  const cents = Number(whole) * 100 + Number(fraction);
+  const [whole, fraction = ''] = amount.split('.');
+  const cents = Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
   if (
     !Number.isSafeInteger(cents) ||
-    cents < 100 ||
+    cents < 1 ||
     cents > MAX_CONTRIBUTION_AMOUNT_CENTS
   ) {
     throw new Error('Invalid contribution amount');
