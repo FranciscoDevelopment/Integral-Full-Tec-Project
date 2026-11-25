@@ -198,7 +198,7 @@ export function MainNav() {
             </NavLink>
           ),
         )}
-        <AccountMenu className="ml-2" />
+        <AccountMenu className="ml-2 lg:ml-8" />
       </nav>
 
       <button
