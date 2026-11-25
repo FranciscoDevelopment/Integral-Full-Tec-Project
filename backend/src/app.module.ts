@@ -12,6 +12,7 @@ import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CollaborationsModule } from './collaborations/collaborations.module';
+import { ProjectsModule } from './projects/projects.module';
 import { GLOBAL_EXCEPTION_FILTERS } from './common/filters/global-filters';
 
 @Module({
@@ -24,6 +25,7 @@ import { GLOBAL_EXCEPTION_FILTERS } from './common/filters/global-filters';
     UsersModule,
     AuthModule,
     CollaborationsModule,
+    ProjectsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
