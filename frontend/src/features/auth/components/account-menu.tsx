@@ -110,6 +110,13 @@ export function AccountMenu({
           {ROLE_LABELS[role]}
         </Badge>
       </div>
+      <Link
+        href="/profile"
+        onClick={onNavigate}
+        className={buttonStyles({ variant: "outline", size, className: itemClasses })}
+      >
+        Mi perfil
+      </Link>
       <Button
         variant="outline"
         size={size}
