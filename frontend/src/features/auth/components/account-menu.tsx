@@ -8,6 +8,7 @@ import { Badge, Button, buttonStyles } from "@/shared/components/ui";
 import { ROLE_LABELS } from "@/shared/catalogs/roles";
 import { cn } from "@/shared/lib/cn";
 import { useSession } from "../hooks/use-session";
+import { AccountDropdown } from "./account-dropdown";
 
 const LOGIN_HREF = "/login";
 const REGISTER_HREF = "/register";
@@ -106,27 +107,34 @@ export function AccountMenu({
         >
           {name}
         </span>
-        <Badge variant="brand" className="shrink-0">
+        <Badge variant="brand" className="shrink-0 text-[0.6875rem]">
           {ROLE_LABELS[role]}
         </Badge>
       </div>
-      <Link
-        href="/profile"
-        onClick={onNavigate}
-        className={buttonStyles({ variant: "outline", size, className: itemClasses })}
-      >
-        Mi perfil
-      </Link>
-      <Button
-        variant="outline"
-        size={size}
-        onClick={handleLogout}
-        disabled={isLoggingOut}
-        aria-busy={isLoggingOut}
-        className={itemClasses}
-      >
-        {isLoggingOut ? "Cerrando sesión…" : "Cerrar sesión"}
-      </Button>
+      {isMobile ? (
+        <>
+          <Link
+            href="/profile"
+            onClick={onNavigate}
+            className={buttonStyles({ variant: "outline", size, className: itemClasses })}
+          >
+            Mi perfil
+          </Link>
+          <Button
+            variant="outline"
+            size={size}
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            aria-busy={isLoggingOut}
+            className={itemClasses}
+          >
+            {isLoggingOut ? "Cerrando sesión…" : "Cerrar sesión"}
+          </Button>
+        </>
+      ) : (
+        // Desktop: one round icon that opens the options (see AccountDropdown)
+        <AccountDropdown onLogout={handleLogout} isLoggingOut={isLoggingOut} />
+      )}
     </div>
   );
 }
