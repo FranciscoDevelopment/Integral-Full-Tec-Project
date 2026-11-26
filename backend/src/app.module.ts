@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CollaborationsModule } from './collaborations/collaborations.module';
 import { ContributionsModule } from './contributions/contributions.module';
+import { ProjectsModule } from './projects/projects.module';
 import { GLOBAL_EXCEPTION_FILTERS } from './common/filters/global-filters';
 
 @Module({
@@ -26,6 +27,7 @@ import { GLOBAL_EXCEPTION_FILTERS } from './common/filters/global-filters';
     AuthModule,
     CollaborationsModule,
     ContributionsModule,
+    ProjectsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
