@@ -17,6 +17,8 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, actions }: ProjectCardProps) {
   const titleId = `project-${project.id}-title`;
+  // A hidden project is a 404 in the public detail, even for its owner: no link to it
+  const isHidden = project.status === "hidden";
 
   return (
     <article
@@ -33,17 +35,27 @@ export function ProjectCard({ project, actions }: ProjectCardProps) {
       </header>
 
       <h3 id={titleId} className="text-lg font-semibold text-slate-900">
-        <Link
-          href={`/projects/${project.id}`}
-          className="hover:text-brand-700 hover:underline"
-        >
-          {project.title}
-        </Link>
+        {isHidden ? (
+          project.title
+        ) : (
+          <Link
+            href={`/projects/${project.id}`}
+            className="hover:text-brand-700 hover:underline"
+          >
+            {project.title}
+          </Link>
+        )}
       </h3>
 
       <p className="line-clamp-3 text-sm text-slate-600">
         {project.description}
       </p>
+
+      {isHidden && (
+        <p className="text-xs text-amber-700">
+          Lo ocultó un moderador: no aparece en el explorador.
+        </p>
+      )}
 
       <dl className="mt-auto grid grid-cols-2 gap-2 text-sm">
         <dt className="text-slate-500">Meta</dt>

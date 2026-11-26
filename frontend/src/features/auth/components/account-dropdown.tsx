@@ -4,9 +4,11 @@ import Link from "next/link" ;
 import { LogOut, UserRound } from "lucide-react" ;
 import { useEffect, useId, useRef, useState } from "react" ;
 import { cn } from "@/shared/lib/cn" ;
+import type { AccountLink } from "../account-links" ;
 
 
 type AccountDropdownPropsT = {
+    links : AccountLink[] ;
     onLogout : () => void ;
     isLoggingOut : boolean ;
 }
@@ -17,7 +19,7 @@ const ITEM_CLASSES = "flex w-full items-center gap-2 whitespace-nowrap px-3 py-2
 
 // Desktop only: a round user icon that opens a small box with the account options.
 // The mobile panel keeps its own full-width buttons (see AccountMenu)
-export function AccountDropdown ( { onLogout, isLoggingOut } : AccountDropdownPropsT ) {
+export function AccountDropdown ( { links, onLogout, isLoggingOut } : AccountDropdownPropsT ) {
 
     const [ open, setOpen ] = useState(false) ;
 
@@ -93,26 +95,30 @@ export function AccountDropdown ( { onLogout, isLoggingOut } : AccountDropdownPr
             <ul
                 id={menuId}
                 className={cn(
-                    "absolute right-0 top-full z-50 mt-2 w-48 origin-top-right divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg transition-all duration-150 ease-out",
+                    "absolute right-0 top-full z-50 mt-2 w-56 origin-top-right divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg transition-all duration-150 ease-out",
                     open ? "visible translate-y-0 scale-100 opacity-100" : "invisible -translate-y-1 scale-95 opacity-0",
                 )}
             >
 
-                <li>
+                { links.map( ( { label, href, icon : Icon } ) => (
 
-                    <Link
-                        href="/profile"
-                        onClick={ () => setOpen(false) }
-                        className={cn( ITEM_CLASSES, "text-slate-800 hover:bg-slate-100" )}
-                    >
+                    <li key={href}>
 
-                        <UserRound aria-hidden className="size-4" />
+                        <Link
+                            href={href}
+                            onClick={ () => setOpen(false) }
+                            className={cn( ITEM_CLASSES, "text-slate-800 hover:bg-slate-100" )}
+                        >
 
-                        Mi perfil
+                            <Icon aria-hidden className="size-4" />
 
-                    </Link>
+                            {label}
 
-                </li>
+                        </Link>
+
+                    </li>
+
+                ) ) }
 
                 <li>
 
