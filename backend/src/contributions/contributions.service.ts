@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { ProjectStatus } from 'src/generated/prisma/enums';
+import { JwtPayload } from 'src/common/types/jwt-payload.type';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  ContributionStatus,
+  ProjectStatus,
+} from 'src/generated/prisma/enums';
 import { mapContribution, CONTRIBUTION_SELECT } from './contribution.mapper';
 import { calculateContributionFee } from './contribution-fee.util';
 
@@ -13,15 +17,33 @@ export class ContributionsService {
     return calculateContributionFee(amount);
   }
 
-  async findByProject(projectId: string, { page, limit }: PaginationQueryDto) {
-    const project = await this.prisma.project.findUnique({
-      where: { id: projectId },
-      select: { id: true, status: true },
+  async create(projectId: string, amount: string, user: JwtPayload) {
+    await this.assertProjectVisible(projectId);
+
+    const fee = calculateContributionFee(amount);
+    const contribution = await this.prisma.contribution.create({
+      data: {
+        projectId,
+        sponsorId: user.sub,
+        amount: fee.amount,
+        processingFee: fee.fee,
+        status: ContributionStatus.simulated,
+      },
     });
 
-    if (!project || project.status === ProjectStatus.hidden) {
-      throw new NotFoundException('Project not found');
-    }
+    return {
+      id: contribution.id,
+      projectId: contribution.projectId,
+      sponsorId: contribution.sponsorId,
+      amount: fee.amount,
+      processingFee: fee.fee,
+      status: contribution.status,
+      createdAt: contribution.createdAt,
+    };
+  }
+
+  async findByProject(projectId: string, { page, limit }: PaginationQueryDto) {
+    await this.assertProjectVisible(projectId);
 
     const where = { projectId };
     const [contributions, total, aggregate] = await this.prisma.$transaction([
@@ -44,5 +66,16 @@ export class ContributionsService {
       meta: { total, page, limit },
       totalAmount: aggregate._sum.amount?.toFixed(2) ?? '0.00',
     };
+  }
+
+  private async assertProjectVisible(projectId: string) {
+    const project = await this.prisma.project.findUnique({
+      where: { id: projectId },
+      select: { id: true, status: true },
+    });
+
+    if (!project || project.status === ProjectStatus.hidden) {
+      throw new NotFoundException('Project not found');
+    }
   }
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProfileInfo } from "@/features/auth/components/profile-info";
+import { MyProjectsList } from "@/features/projects/components/my-projects-list";
 import { PageShell } from "@/shared/components/layout/page-shell";
 
 export const metadata: Metadata = { title: "Mi perfil" };
@@ -21,7 +22,7 @@ export default function ProfilePage() {
           >
             Mis proyectos
           </h2>
-          {/* Iri's <MyProjectsList /> is mounted here once features/projects is in develop */}
+          <MyProjectsList />
         </section>
       </div>
     </PageShell>

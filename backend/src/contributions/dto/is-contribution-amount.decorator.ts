@@ -18,7 +18,7 @@ class IsContributionAmountConstraint implements ValidatorConstraintInterface {
     const cents = Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
     if (!Number.isSafeInteger(cents)) return false;
 
-    return cents >= 100 && cents <= 100_000_000;
+    return cents >= 1 && cents <= 100_000_000;
   }
 
   defaultMessage(): string {
