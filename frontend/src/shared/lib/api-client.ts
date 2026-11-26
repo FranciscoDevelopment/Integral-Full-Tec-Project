@@ -44,6 +44,9 @@ let refreshInFlight : Promise<boolean> | null = null ;
 
 const NO_REFRESH_PATHS = [ "/auth/signin", "/auth/signup", "/auth/refresh", "/auth/logout" ] ;
 
+// Fired on window when the refresh is refused: whoever holds the client session must clear it
+export const SESSION_EXPIRED_EVENT = "session-expired" ;
+
 
 function buildUrl ( path : string, query? : QueryT ) : string {
 
@@ -160,9 +163,19 @@ async function apiRequest<T> ( path : string, method : HttpMethodT, options : Re
 
 
     // Expired access token: refresh once and retry once
-    if( response.status === 401 && !NO_REFRESH_PATHS.includes( path ) && ( await refreshSession() ) ) {
+    if( response.status === 401 && !NO_REFRESH_PATHS.includes( path ) ) {
 
-        response = await send( path, method, options ) ;
+        if( await refreshSession() ) {
+
+            response = await send( path, method, options ) ;
+
+        }
+        // The API refused the refresh: the session is over, let the UI forget it
+        else if( typeof window !== "undefined" ) {
+
+            window.dispatchEvent( new Event( SESSION_EXPIRED_EVENT ) ) ;
+
+        }
 
     }
 
