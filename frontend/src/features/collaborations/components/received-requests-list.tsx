@@ -4,10 +4,11 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import {
   Button,
-  Card,
-  EmptyState,
+  ErrorState,
+  LoadingState,
   type ButtonVariant,
 } from "@/shared/components/ui";
+import { EmptyState } from "@/shared/components/ui/empty-state";
 import {
   getErrorMessage,
   getProjectCollaborations,
@@ -59,23 +60,15 @@ export function ReceivedRequestsList({ projectId }: { projectId: string }) {
   }
 
   if (isLoading) {
-    return (
-      <p aria-live="polite" className="py-8 text-center text-sm text-slate-600">
-        Cargando solicitudes...
-      </p>
-    );
+    return <LoadingState label="Cargando solicitudes..." />;
   }
 
   if (error) {
     return (
-      <EmptyState
+      <ErrorState
         title="No pudimos cargar las solicitudes"
-        description={error}
-        action={
-          <Button variant="outline" onClick={reload}>
-            Reintentar
-          </Button>
-        }
+        message={error}
+        onRetry={reload}
       />
     );
   }
@@ -90,16 +83,25 @@ export function ReceivedRequestsList({ projectId }: { projectId: string }) {
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul
+      aria-label="Solicitudes recibidas para este proyecto"
+      className="flex flex-col gap-3"
+    >
       {data.data.map((collaboration) => (
         <li key={collaboration.id}>
-          <Card className="flex flex-col gap-2 p-4">
-            <div className="flex items-start justify-between gap-3">
-              <p className="font-semibold text-slate-900">
+          <article
+            aria-labelledby={`received-request-${collaboration.id}`}
+            className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4"
+          >
+            <header className="flex items-start justify-between gap-3">
+              <h2
+                id={`received-request-${collaboration.id}`}
+                className="font-semibold text-slate-900"
+              >
                 {collaboration.collaborator.name}
-              </p>
+              </h2>
               <CollaborationStatusBadge status={collaboration.status} />
-            </div>
+            </header>
             <p className="text-sm text-slate-800">
               <span className="font-medium">{collaboration.role}</span>:{" "}
               {collaboration.description}
@@ -108,21 +110,22 @@ export function ReceivedRequestsList({ projectId }: { projectId: string }) {
               {formatPeriod(collaboration.startDate, collaboration.endDate)}
             </p>
             {NEXT_ACTIONS[collaboration.status].length > 0 && (
-              <div className="flex flex-wrap gap-2">
+              <footer className="flex flex-wrap gap-2">
                 {NEXT_ACTIONS[collaboration.status].map((action) => (
                   <Button
                     key={action.status}
                     size="sm"
                     variant={action.variant}
                     disabled={busyId === collaboration.id}
+                    aria-label={`${action.label} de ${collaboration.collaborator.name}`}
                     onClick={() => handleChange(collaboration.id, action.status)}
                   >
                     {action.label}
                   </Button>
                 ))}
-              </div>
+              </footer>
             )}
-          </Card>
+          </article>
         </li>
       ))}
     </ul>

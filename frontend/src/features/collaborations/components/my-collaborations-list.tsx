@@ -1,7 +1,7 @@
 "use client";
-
 import { toast } from "sonner";
-import { Button, Card, EmptyState } from "@/shared/components/ui";
+import { Button, ErrorState, LoadingState } from "@/shared/components/ui";
+import { EmptyState } from "@/shared/components/ui/empty-state";
 import {
   getErrorMessage,
   getMyCollaborations,
@@ -26,23 +26,15 @@ export function MyCollaborationsList() {
   }
 
   if (isLoading) {
-    return (
-      <p aria-live="polite" className="py-8 text-center text-sm text-slate-600">
-        Cargando tus colaboraciones...
-      </p>
-    );
+    return <LoadingState label="Cargando tus colaboraciones..." />;
   }
 
   if (error) {
     return (
-      <EmptyState
+      <ErrorState
         title="No pudimos cargar tus colaboraciones"
-        description={error}
-        action={
-          <Button variant="outline" onClick={reload}>
-            Reintentar
-          </Button>
-        }
+        message={error}
+        onRetry={reload}
       />
     );
   }
@@ -57,21 +49,30 @@ export function MyCollaborationsList() {
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul
+      aria-label="Mis solicitudes de colaboración"
+      className="flex flex-col gap-3"
+    >
       {data.data.map((collaboration) => (
         <li key={collaboration.id}>
-          <Card className="flex flex-col gap-2 p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-semibold text-slate-900">
+          <article
+            aria-labelledby={`my-collaboration-${collaboration.id}`}
+            className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4"
+          >
+            <header className="flex items-start justify-between gap-3">
+              <hgroup>
+                <h2
+                  id={`my-collaboration-${collaboration.id}`}
+                  className="font-semibold text-slate-900"
+                >
                   {collaboration.project.title}
-                </p>
+                </h2>
                 <p className="text-sm text-slate-600">
                   {PROJECT_KIND_LABELS[collaboration.project.kind]}
                 </p>
-              </div>
+              </hgroup>
               <CollaborationStatusBadge status={collaboration.status} />
-            </div>
+            </header>
             <p className="text-sm text-slate-800">
               <span className="font-medium">{collaboration.role}</span>:{" "}
               {collaboration.description}
@@ -80,17 +81,18 @@ export function MyCollaborationsList() {
               {formatPeriod(collaboration.startDate, collaboration.endDate)}
             </p>
             {collaboration.status === "pending" && (
-              <div>
+              <footer>
                 <Button
                   variant="outline"
                   size="sm"
+                  aria-label={`Retirar la solicitud para ${collaboration.project.title}`}
                   onClick={() => handleWithdraw(collaboration.id)}
                 >
                   Retirar solicitud
                 </Button>
-              </div>
+              </footer>
             )}
-          </Card>
+          </article>
         </li>
       ))}
     </ul>

@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { Badge, Button, buttonStyles } from "@/shared/components/ui";
 import { ROLE_LABELS } from "@/shared/catalogs/roles";
 import { cn } from "@/shared/lib/cn";
+import { getAccountLinks } from "../account-links";
 import { useSession } from "../hooks/use-session";
+import { AccountDropdown } from "./account-dropdown";
 
 const LOGIN_HREF = "/login";
 const REGISTER_HREF = "/register";
@@ -93,6 +95,7 @@ export function AccountMenu({
   }
 
   const { name, role } = session.user;
+  const links = getAccountLinks(role);
 
   return (
     <div className={containerClasses}>
@@ -106,20 +109,37 @@ export function AccountMenu({
         >
           {name}
         </span>
-        <Badge variant="brand" className="shrink-0">
+        <Badge variant="brand" className="shrink-0 text-[0.6875rem]">
           {ROLE_LABELS[role]}
         </Badge>
       </div>
-      <Button
-        variant="outline"
-        size={size}
-        onClick={handleLogout}
-        disabled={isLoggingOut}
-        aria-busy={isLoggingOut}
-        className={itemClasses}
-      >
-        {isLoggingOut ? "Cerrando sesión…" : "Cerrar sesión"}
-      </Button>
+      {isMobile ? (
+        <>
+          {links.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={onNavigate}
+              className={buttonStyles({ variant: "outline", size, className: itemClasses })}
+            >
+              {label}
+            </Link>
+          ))}
+          <Button
+            variant="outline"
+            size={size}
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            aria-busy={isLoggingOut}
+            className={itemClasses}
+          >
+            {isLoggingOut ? "Cerrando sesión…" : "Cerrar sesión"}
+          </Button>
+        </>
+      ) : (
+        // Desktop: one round icon that opens the options (see AccountDropdown)
+        <AccountDropdown links={links} onLogout={handleLogout} isLoggingOut={isLoggingOut} />
+      )}
     </div>
   );
 }

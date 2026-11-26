@@ -1,5 +1,12 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsEnum,
+  IsIn,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { ProjectKind, ProjectStatus } from 'src/generated/prisma/enums';
 
@@ -23,6 +30,12 @@ export class ProjectsQueryDto extends PaginationQueryDto {
   @IsString()
   @MaxLength(100)
   q?: string;
+
+  // GET /projects?ownerId=<uuid>: the public projects of one person (their profile).
+  // The hidden ones stay out: the public list never shows them, whatever the filters
+  @IsOptional()
+  @IsUUID()
+  ownerId?: string;
 }
 
 // GET /admin/projects: the same filters, but the admin can also ask for hidden ones

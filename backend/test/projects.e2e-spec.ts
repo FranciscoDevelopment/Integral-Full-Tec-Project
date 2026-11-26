@@ -35,6 +35,7 @@ describe('Projects (e2e)', () => {
 
   let projectId: string;
   let hiddenProjectId: string;
+  let hiddenOwnerId: string;
 
   const api = () => request(app.getHttpServer());
   const bearer = (token: string) => ({ Authorization: `Bearer ${token}` });
@@ -255,6 +256,24 @@ describe('Projects (e2e)', () => {
 
     it('400 when someone asks for hidden projects in the public list', () =>
       api().get('/projects').query({ status: 'hidden' }).expect(400));
+
+    it('filters by owner: only that person projects', async () => {
+      const detail = await api().get(`/projects/${projectId}`).expect(200);
+      const ownerId = (detail.body as { ownerId: string }).ownerId;
+
+      const res = await api()
+        .get('/projects')
+        .query({ ownerId, limit: 50 })
+        .expect(200);
+      const body = res.body as {
+        data: { id: string; ownerId: string }[];
+      };
+      expect(body.data.map((p) => p.id)).toContain(projectId);
+      expect(body.data.every((p) => p.ownerId === ownerId)).toBe(true);
+    });
+
+    it('400 when the owner filter is not a uuid', () =>
+      api().get('/projects').query({ ownerId: 'not-a-uuid' }).expect(400));
   });
 
   describe('moderation (admin)', () => {
@@ -264,7 +283,9 @@ describe('Projects (e2e)', () => {
         .set(bearer(other))
         .send({ ...newProject, title: 'Proyecto para moderar' })
         .expect(201);
-      hiddenProjectId = (res.body as { id: string }).id;
+      const created = res.body as { id: string; ownerId: string };
+      hiddenProjectId = created.id;
+      hiddenOwnerId = created.ownerId;
     });
 
     it('403 for a regular user', () =>
@@ -295,6 +316,17 @@ describe('Projects (e2e)', () => {
         .query({ q: 'Proyecto para moderar' })
         .expect(200);
       expect((res.body as { meta: { total: number } }).meta.total).toBe(0);
+    });
+
+    it('a hidden project stays out of the owner filter too', async () => {
+      const res = await api()
+        .get('/projects')
+        .query({ ownerId: hiddenOwnerId, limit: 50 })
+        .expect(200);
+      const ids = (res.body as { data: { id: string }[] }).data.map(
+        (p) => p.id,
+      );
+      expect(ids).not.toContain(hiddenProjectId);
     });
 
     it('404 (not 403) when someone else tries to edit a hidden project', () =>

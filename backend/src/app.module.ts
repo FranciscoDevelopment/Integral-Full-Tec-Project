@@ -12,6 +12,9 @@ import { RolesGuard } from './common/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CollaborationsModule } from './collaborations/collaborations.module';
+import { ContributionsModule } from './contributions/contributions.module';
+import { ProjectsModule } from './projects/projects.module';
+import { GLOBAL_EXCEPTION_FILTERS } from './common/filters/global-filters';
 
 @Module({
   imports: [
@@ -23,6 +26,8 @@ import { CollaborationsModule } from './collaborations/collaborations.module';
     UsersModule,
     AuthModule,
     CollaborationsModule,
+    ContributionsModule,
+    ProjectsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
@@ -30,6 +35,8 @@ import { CollaborationsModule } from './collaborations/collaborations.module';
     { provide: APP_GUARD, useClass: ThrottlerGuard }, // 1°
     { provide: APP_GUARD, useClass: AuthGuard }, // 2°
     { provide: APP_GUARD, useClass: RolesGuard }, // 3°
+    // Errors: Prisma-specific filter first, catch-all last (see the order note inside)
+    ...GLOBAL_EXCEPTION_FILTERS,
   ],
 })
 export class AppModule {}

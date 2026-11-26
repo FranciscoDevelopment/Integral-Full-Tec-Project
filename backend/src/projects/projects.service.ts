@@ -184,6 +184,7 @@ export class ProjectsService {
     const where: Prisma.ProjectWhereInput = {};
 
     if (query.kind) where.kind = query.kind;
+    if (query.ownerId) where.ownerId = query.ownerId;
 
     if (query.q) {
       where.OR = [
