@@ -22,6 +22,7 @@ export default tseslint.config(
       'src/common/dto/**/*.ts',
       'src/common/filters/**/*.ts',
       'src/common/hashing/**/*.ts',
+      'src/common/middleware/**/*.ts',
       'src/common/regex/**/*.ts',
       'src/common/types/jwt.types.ts',
     ],

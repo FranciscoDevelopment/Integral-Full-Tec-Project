@@ -98,14 +98,21 @@ export class AuthController {
 
   private cookieOptions( path : string ) : CookieOptions {
 
+    // true only when the API is served over HTTPS (COOKIE_SECURE=true in production)
+    const secure = this.configService.get<string>('COOKIE_SECURE') === 'true' ;
+
+
     return {
 
       httpOnly: true,
 
-      sameSite: 'lax',
+      // Over HTTPS the front (Vercel) and the API (Render) are different sites: a Lax cookie would
+      // never travel between them. Browsers only accept SameSite=None together with Secure, so
+      // both switch on the same flag. Locally (http, same site) it stays Lax.
+      // None lets any page trigger a request with the cookie: originCheck() (main.ts) covers that
+      sameSite: secure  ?  'none'  :  'lax',
 
-      // true only when the API is served over HTTPS (COOKIE_SECURE=true in production)
-      secure: this.configService.get<string>('COOKIE_SECURE') === 'true',
+      secure,
 
       path
 
