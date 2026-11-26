@@ -47,4 +47,13 @@ export class ContributionsController {
   ) {
     return this.contributionsService.findByProject(projectId, query);
   }
+
+  @Auth(Role.sponsor)
+  @Get('me/contributions')
+  findMine(
+    @CurrentUser() user: JwtPayload,
+    @Query() query: PaginationQueryDto,
+  ) {
+    return this.contributionsService.findMine(user.sub, query);
+  }
 }

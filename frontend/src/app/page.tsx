@@ -1,3 +1,4 @@
+import { FeaturedProjects } from "@/features/projects/components/featured-projects";
 import { HomeHero } from "@/shared/components/home/home-hero";
 import { HowItWorksSection } from "@/shared/components/how-it-works-section";
 //import { HomeSection } from "@/features/home/components/home-section" ;
@@ -18,8 +19,7 @@ export default function HomePage() {
         linkLabel="Explorar proyectos"
       >
         
-        {/* Iri: replace the placeholder with <FeaturedProjects /> */}
-        <EmptyState title="Pronto vas a ver proyectos acá" />
+        <FeaturedProjects />
 
       </HomeSection>
 
@@ -40,7 +40,6 @@ export default function HomePage() {
       
       {/*
       <CommunityCounters />
-      <LatestNewsSection />
       */}
 
 

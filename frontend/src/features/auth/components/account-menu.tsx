@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Badge, Button, buttonStyles } from "@/shared/components/ui";
 import { ROLE_LABELS } from "@/shared/catalogs/roles";
 import { cn } from "@/shared/lib/cn";
+import { getAccountLinks } from "../account-links";
 import { useSession } from "../hooks/use-session";
 import { AccountDropdown } from "./account-dropdown";
 
@@ -94,6 +95,7 @@ export function AccountMenu({
   }
 
   const { name, role } = session.user;
+  const links = getAccountLinks(role);
 
   return (
     <div className={containerClasses}>
@@ -113,13 +115,16 @@ export function AccountMenu({
       </div>
       {isMobile ? (
         <>
-          <Link
-            href="/profile"
-            onClick={onNavigate}
-            className={buttonStyles({ variant: "outline", size, className: itemClasses })}
-          >
-            Mi perfil
-          </Link>
+          {links.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={onNavigate}
+              className={buttonStyles({ variant: "outline", size, className: itemClasses })}
+            >
+              {label}
+            </Link>
+          ))}
           <Button
             variant="outline"
             size={size}
@@ -133,7 +138,7 @@ export function AccountMenu({
         </>
       ) : (
         // Desktop: one round icon that opens the options (see AccountDropdown)
-        <AccountDropdown onLogout={handleLogout} isLoggingOut={isLoggingOut} />
+        <AccountDropdown links={links} onLogout={handleLogout} isLoggingOut={isLoggingOut} />
       )}
     </div>
   );

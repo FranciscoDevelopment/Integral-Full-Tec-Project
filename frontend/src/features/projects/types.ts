@@ -72,6 +72,8 @@ export interface ProjectFilters {
   kind?: ProjectKind;
   status?: OwnerStatus;
   q?: string;
+  // The public projects of one person (their profile); hidden ones never show up
+  ownerId?: string;
   page?: number;
   limit?: number;
 }
