@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import type { ReactNode } from "react";
+import { SESSION_EXPIRED_EVENT } from "@/shared/lib/api-client";
 import {
   getCurrentSession,
   logout as logoutRequest,
@@ -63,6 +64,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
     return () => {
       ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    // The API client could not renew the session: forget it so the guard redirects to /login
+    const handleSessionExpired = () => {
+      setSession(null);
+      setError(null);
+    };
+
+    window.addEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+
+    return () => {
+      window.removeEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
     };
   }, []);
 
