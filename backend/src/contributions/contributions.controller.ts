@@ -1,7 +1,18 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Auth } from 'src/common/decorators/auth.decorator';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { Role } from 'src/generated/prisma/enums';
+import { JwtPayload } from 'src/common/types/jwt-payload.type';
 import { ContributionsService } from './contributions.service';
+import { CreateContributionDto } from './dto/create-contribution.dto';
 import { PreviewContributionQueryDto } from './dto/preview-contribution-query.dto';
 
 const ALL_ROLES = [Role.admin, Role.sponsor, Role.user];
@@ -14,5 +25,15 @@ export class ContributionsController {
   @Get('contributions/preview')
   preview(@Query() query: PreviewContributionQueryDto) {
     return this.contributionsService.preview(query.amount);
+  }
+
+  @Auth(Role.sponsor)
+  @Post('projects/:id/contributions')
+  create(
+    @Param('id', ParseUUIDPipe) projectId: string,
+    @Body() dto: CreateContributionDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.contributionsService.create(projectId, dto.amount, user);
   }
 }
