@@ -68,6 +68,25 @@ export class ContributionsService {
     };
   }
 
+  async findMine(sponsorId: string, { page, limit }: PaginationQueryDto) {
+    const where = { sponsorId };
+    const [contributions, total] = await this.prisma.$transaction([
+      this.prisma.contribution.findMany({
+        where,
+        select: CONTRIBUTION_SELECT,
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.prisma.contribution.count({ where }),
+    ]);
+
+    return {
+      data: contributions.map(mapContribution),
+      meta: { total, page, limit },
+    };
+  }
+
   private async assertProjectVisible(projectId: string) {
     const project = await this.prisma.project.findUnique({
       where: { id: projectId },
