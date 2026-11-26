@@ -17,7 +17,8 @@ export const NAV_ITEMS: readonly NavItem[] = [
     href: "/projects",
     children: [
       { label: "Proponer proyecto", href: "/projects/new" },
-      { label: "Compartir mi proyecto en avance", href: "/projects/alerts" },
+      // Not built yet: /projects/alerts has no page (it used to fall into /projects/[id] and fail). Enable it when it exists
+      //{ label: "Compartir mi proyecto en avance", href: "/projects/alerts" },
       { label: "Explorar proyectos", href: "/projects" },
       //{ label: "Publicar alertas", href: "/projects/alerts" },
     ],
